@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hanchen Liu — Portfolio</title>
-  <meta name="description" content="Ph.D candidate in Quantum Information / Statistical Physics" />
+  <title>Hanchen Liu — Quantum Information & HPC</title>
+  <meta name="description" content="Ph.D. candidate in Physics (Boston College). Quantum information, numerical simulation, and high‑performance computing." />
   <link rel="icon" href="favicon.ico" />
   <link rel="stylesheet" href="style.css" />
   <meta property="og:title" content="Hanchen Liu — Portfolio" />
-  <meta property="og:description" content="Ph.D. Candidate in Quantum Information / Statitical Physics" />
+  <meta property="og:description" content="Ph.D. candidate in Physics focused on quantum information, numerical simulation, and high‑performance computing." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://hcphy.github.io/" />
 </head>
@@ -28,27 +28,41 @@
   <main>
     <section class="hero container">
       <h1>Hello, I’m <span class="accent">Hanchen Liu</span>.</h1>
-      <p>Physics PhD candidate focusing on quantum info & statistical physics.</p>
+      <p>Physics Ph.D. candidate — quantum information • statistical physics • high‑performance computing.</p>
       <p><a class="btn" href="#projects">View Projects</a> <a class="btn ghost" href="#contact">Get in Touch</a></p>
     </section>
 
     <section id="about" class="section container">
       <h2>About</h2>
-      <p>Write a 3–5 sentence bio. Mention your interests, institution, and what you’re looking for.</p>
+      <p>I am a Ph.D. candidate in Physics at Boston College advised by Prof. Xiao Chen. My research focuses on quantum information and statistical physics, including measurement‑induced entanglement transitions and error‑correction phase transitions. On the computational side, I build large‑scale simulators with Python, C/C++ (C++20), MATLAB (C‑MEX, Parallel Computing Toolbox), and Julia on Linux/HPC clusters (SLURM). I’m proficient with Git/GitHub and performance‑minded implementation.</p>
+      <p>Previously, I earned an M.A. in Physics from Stony Brook University (advisor: Prof. Jennifer Cano) and a B.S. in Physics from Sichuan University, China.</p>
     </section>
 
     <section id="projects" class="section container">
       <h2>Projects</h2>
       <div class="grid">
         <article class="card">
-          <h3>Project One</h3>
-          <p>One‑line summary of what it does and why it’s interesting.</p>
-          <p><a href="https://github.com/YOUR_GITHUB_USERNAME/PROJECT_ONE">Source</a> · <a href="#">Demo</a></p>
+          <h3>Bit‑Packed Z₂ Linear‑Algebra Library (C / MATLAB‑CMEX)</h3>
+          <p>Memory‑efficient GF(2) matrix format (~×64 reduction) with optimized mat‑mul and bit‑rank routines; integrated into a MATLAB stabilizer simulator enabling 10k‑qubit simulations on 64‑core clusters.</p>
+          <p><a href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub</a></p>
         </article>
+
         <article class="card">
-          <h3>Project Two</h3>
-          <p>Concise description and your role/impact.</p>
-          <p><a href="https://github.com/YOUR_GITHUB_USERNAME/PROJECT_TWO">Source</a></p>
+          <h3>Large‑Scale Quantum Stabilizer Simulator (MATLAB / Shell / SLURM)</h3>
+          <p>Parallel stabilizer‑state simulator for 10,000‑qubit systems; achieved ~8× speed‑ups via vectorization and <code>parfor</code> on HPC clusters.</p>
+          <p><a href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub</a></p>
+        </article>
+
+        <article class="card">
+          <h3>Kinetic Monte Carlo for Glassy Lattices (Julia / SLURM)</h3>
+          <p>Rejection‑free KMC engine with a Fenwick‑tree (BIT) cumulative‑rate selector for O(log N) event draws/updates; scaled to 64 cores and ran 48‑hour production jobs on 4096‑site 2D lattices.</p>
+          <p><a href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub</a></p>
+        </article>
+
+        <article class="card">
+          <h3>C++20 Self‑Study Mini‑Projects</h3>
+          <p>Differential‑testing harness for DSA problems (randomized generators, oracle vs. impl comparison, property checks), header‑only <code>std::jthread</code> pool with a lock‑free queue, and an LLVM‑IR redundant ϕ‑node elimination pass.</p>
+          <p><a href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub</a></p>
         </article>
       </div>
     </section>
@@ -56,18 +70,21 @@
     <section id="publications" class="section container">
       <h2>Publications</h2>
       <ul>
-        <li>Lastname, Y., <em>Title</em>, Venue/Year. <a href="#">arXiv</a></li>
+        <li>[LC25] Hanchen Liu and Xiao Chen. <em>Coherent error induced phase transition</em>. arXiv:2506.00650 (2025). <a href="https://arxiv.org/abs/2506.00650" target="_blank" rel="noopener">arXiv</a></li>
+        <li>[LRC25] Hanchen Liu, Vikram Ravindranath, and Xiao Chen. <em>Quantum entanglement phase transitions and computational complexity: Insights from Ising models</em>. <em>Physical Review B</em>, 111(2):024312, 2025. <a href="https://doi.org/10.1103/physrevb.111.024312" target="_blank" rel="noopener">DOI</a></li>
+        <li>[LC24] Hanchen Liu and Xiao Chen. <em>Plaquette models, cellular automata, and measurement‑induced criticality</em>. <em>J. Phys. A</em>, 57(43):435003, 2024. <a href="https://doi.org/10.1088/1751-8121/ad82bc" target="_blank" rel="noopener">DOI</a></li>
+        <li>[LZC22] Hanchen Liu, Tianci Zhou, and Xiao Chen. <em>Measurement‑induced entanglement transition in a two‑dimensional shallow circuit</em>. <em>Physical Review B</em>, 106(14):144311, 2022. <a href="https://doi.org/10.1103/PhysRevB.106.144311" target="_blank" rel="noopener">DOI</a></li>
       </ul>
     </section>
 
     <section id="contact" class="section container">
       <h2>Contact</h2>
-      <p>Email: <a href="mailto:you@example.com">you@example.com</a> · GitHub: <a href="https://github.com/YOUR_GITHUB_USERNAME">@YOUR_GITHUB_USERNAME</a></p>
+      <p>Email: <a href="mailto:hanchen.liu@bc.edu">hanchen.liu@bc.edu</a> · GitHub: <a href="https://github.com/HCPhy" target="_blank" rel="noopener">@HCPhy</a> · Site: <a href="https://hanchenliuphy.alphaxiv.io" target="_blank" rel="noopener">hanchenliuphy.alphaxiv.io</a></p>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container">© <span id="year"></span> Your Name</div>
+    <div class="container">© <span id="year"></span> Hanchen Liu</div>
   </footer>
 
   <script defer src="script.js"></script>
