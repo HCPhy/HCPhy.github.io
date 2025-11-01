@@ -28,3 +28,45 @@ body {
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
 .card { background: var(--card); border: 1px solid #1f2937; padding: 1rem; border-radius: 1rem; }
 .site-footer { border-top: 1px solid #111; padding: 1.2rem 0; margin-top: 2rem; color: var(--muted); }
+
+.contact-list { 
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: .6rem .9rem;
+}
+.contact-list a {
+  display: inline-block; padding: .35rem .7rem; border-radius: 999px;
+  border: 1px solid currentColor; text-decoration: none;
+}
+
+
+.pub-list { 
+  list-style: none; padding: 0; margin: 0; 
+  display: grid; gap: .9rem; 
+}
+.pub { line-height: 1.4; }
+.pub .key { font-weight: 600; margin-right: .4rem; }
+.pub .authors { white-space: nowrap; }
+.pub .title { font-style: italic; }
+.pub .venue, .pub .vol { opacity: .85; }
+.pub .links a {
+  display: inline-block; margin-left: .6rem; padding: .2rem .5rem;
+  border: 1px solid currentColor; border-radius: 999px; text-decoration: none; font-size: .9em;
+}
+@media (max-width: 520px) {
+  .pub .authors { white-space: normal; }
+}
+
+/* Responsive grid; auto wraps based on space */
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .6rem;
+}
+
+/* Uniform tile size (choose the aspect you like: 16/9, 4/3, 1/1) */
+.thumbs--uniform .tile { aspect-ratio: 16 / 9; }
+.thumbs--uniform img {
+  width: 100%; height: 100%;
+  object-fit: cover; /* neat crop to fill tile */
+  border-radius: 8px; display: block;
+}
