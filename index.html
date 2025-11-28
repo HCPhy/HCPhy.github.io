@@ -1,17 +1,26 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hanchen Liu — Quantum Information & HPC</title>
-  <meta name="description" content="Ph.D. candidate in Physics (Boston College). Quantum information, numerical simulation, and high‑performance computing." />
+  <meta name="description"
+    content="Ph.D. candidate in Physics (Boston College). Quantum information, numerical simulation, and high‑performance computing." />
   <link rel="icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <meta property="og:title" content="Hanchen Liu — Portfolio" />
-  <meta property="og:description" content="Ph.D. candidate in Physics focused on quantum information, numerical simulation, and high‑performance computing." />
+  <meta property="og:description"
+    content="Ph.D. candidate in Physics focused on quantum information, numerical simulation, and high‑performance computing." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://hcphy.github.io/" />
 </head>
+
 <body>
   <header class="site-header">
     <nav class="container">
@@ -34,68 +43,73 @@
 
     <section id="about" class="section container">
       <h2>About</h2>
-      <p>I am a Ph.D. candidate in Physics at Boston College advised by Prof. Xiao Chen. My research focuses on quantum information and statistical physics, including measurement‑induced entanglement transitions and error‑correction phase transitions. On the computational side, I build large‑scale simulators with Python, C/C++ (C++20), MATLAB (C‑MEX, Parallel Computing Toolbox), and Julia on Linux/HPC clusters (SLURM). I’m proficient with Git/GitHub and performance‑minded implementation.</p>
-      <p>Previously, I earned an M.A. in Physics from Stony Brook University (advisor: Prof. Jennifer Cano) and a B.S. in Physics from Sichuan University, China.</p>
+      <p>I am a Ph.D. candidate in Physics at Boston College advised by Prof. Xiao Chen. My research focuses on quantum
+        information and statistical physics, including measurement‑induced entanglement transitions and error‑correction
+        phase transitions. On the computational side, I build large‑scale simulators with Python, C/C++ (C++20), MATLAB
+        (C‑MEX, Parallel Computing Toolbox), and Julia on Linux/HPC clusters (SLURM). I’m proficient with Git/GitHub and
+        performance‑minded implementation.</p>
+      <p>Previously, I earned an M.A. in Physics from Stony Brook University (advisor: Prof. Jennifer Cano) and a B.S.
+        in Physics from Sichuan University, China.</p>
     </section>
 
 
     <section id="research" class="section container">
-  <h2>Research</h2>
+      <h2>Research</h2>
 
-  <div class="grid research-grid">
-    <!-- Project: Random Plaquette Models -->
-    <article class="card research-card">
-      <header class="research-head">
-        <h3>Random Plaquette Models</h3>
-        <p class="meta">Statistical Mechanics • Entanglement Phase Transitions</p>
-      </header>
+      <div class="grid research-grid">
+        <!-- Project: Random Plaquette Models -->
+        <article class="card research-card">
+          <header class="research-head">
+            <h3>Random Plaquette Models</h3>
+            <p class="meta">Statistical Mechanics • Entanglement Phase Transitions</p>
+          </header>
 
-      <figure class="thumbs thumbs--uniform">
-        <a href="assets/img/research/phase_diag.png" class="lb tile"
-           data-caption="Phase diagram of a random plaquette model (parameter sweep).">
-          <img src="assets/img/research/phase_diag.png" loading="lazy" decoding="async"
-               alt="Random plaquette model phase diagram">
-        </a>
-      </figure>
+          <figure class="thumbs thumbs--uniform">
+            <a href="assets/img/research/phase_diag.png" class="lb tile"
+              data-caption="Phase diagram of a random plaquette model (parameter sweep).">
+              <img src="assets/img/research/phase_diag.png" loading="lazy" decoding="async"
+                alt="Random plaquette model phase diagram">
+            </a>
+          </figure>
 
-      <p class="blurb">
-        Introduced a random plaquette model and analyzed its ground-state phase diagram and
-        phase transition behavior.
-      </p>
+          <p class="blurb">
+            Introduced a random plaquette model and analyzed its ground-state phase diagram and
+            phase transition behavior.
+          </p>
 
-      <!-- <footer class="actions">
+          <!-- <footer class="actions">
         <a class="btn" href="#" target="_blank" rel="noopener" aria-label="Open preprint for Random Plaquette Models">Preprint</a>
         <a class="btn btn-ghost" href="#" target="_blank" rel="noopener" aria-label="Open GitHub repository for Random Plaquette Models">GitHub</a>
       </footer> -->
-    </article>
+        </article>
 
-    <!-- Project: Entanglement/Complexity via Ising Models -->
-    <article class="card research-card">
-      <header class="research-head">
-        <h3>Entanglement Phase Transitions &amp; Complexity via Ising Models</h3>
-        <p class="meta">Quantum Entanglement • Ising Models</p>
-      </header>
+        <!-- Project: Entanglement/Complexity via Ising Models -->
+        <article class="card research-card">
+          <header class="research-head">
+            <h3>Entanglement Phase Transitions &amp; Complexity via Ising Models</h3>
+            <p class="meta">Quantum Entanglement • Ising Models</p>
+          </header>
 
-      <figure class="thumbs thumbs--uniform">
-        <a href="assets/img/research/ee_setup.png" class="lb tile"
-           data-caption="Setup for entanglement entropy / measurement mapping to an Ising-type model.">
-          <img src="assets/img/research/ee_setup.png" loading="lazy" decoding="async"
-               alt="Entanglement entropy setup mapped to an Ising model">
-        </a>
-      </figure>
+          <figure class="thumbs thumbs--uniform">
+            <a href="assets/img/research/ee_setup.png" class="lb tile"
+              data-caption="Setup for entanglement entropy / measurement mapping to an Ising-type model.">
+              <img src="assets/img/research/ee_setup.png" loading="lazy" decoding="async"
+                alt="Entanglement entropy setup mapped to an Ising model">
+            </a>
+          </figure>
 
-      <p class="blurb">
-        Connects measurement-induced entanglement transitions in random circuits to complex-weight
-        Ising models, linking phase structure to computational complexity.
-      </p>
+          <p class="blurb">
+            Connects measurement-induced entanglement transitions in random circuits to complex-weight
+            Ising models, linking phase structure to computational complexity.
+          </p>
 
-      <!-- <footer class="actions">
+          <!-- <footer class="actions">
         <a class="btn" href="#" target="_blank" rel="noopener" aria-label="Open preprint for Ising model complexity work">Preprint</a>
         <a class="btn btn-ghost" href="#" target="_blank" rel="noopener" aria-label="Open GitHub repository for Ising model complexity work">GitHub</a>
       </footer> -->
-    </article>
-  </div>
-</section>
+        </article>
+      </div>
+    </section>
 
 
     <section id="coding" class="section container">
@@ -103,25 +117,30 @@
       <div class="grid">
         <article class="card">
           <h3>Bit‑Packed Z₂ Linear‑Algebra Library (C / MATLAB‑CMEX)</h3>
-          <p>Memory‑efficient GF(2) matrix format (~×64 reduction) with optimized mat‑mul and bit‑rank routines; integrated into a MATLAB stabilizer simulator enabling 10k‑qubit simulations on 64‑core clusters.</p>
+          <p>Memory‑efficient GF(2) matrix format (~×64 reduction) with optimized mat‑mul and bit‑rank routines;
+            integrated into a MATLAB stabilizer simulator enabling 10k‑qubit simulations on 64‑core clusters.</p>
           <p><a href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub</a></p>
         </article>
 
         <article class="card">
           <h3>Large‑Scale Quantum Stabilizer Simulator (MATLAB / Shell / SLURM)</h3>
-          <p>Parallel stabilizer‑state simulator for 10,000‑qubit systems; achieved ~8× speed‑ups via vectorization and <code>parfor</code> on HPC clusters.</p>
+          <p>Parallel stabilizer‑state simulator for 10,000‑qubit systems; achieved ~8× speed‑ups via vectorization and
+            <code>parfor</code> on HPC clusters.</p>
           <p><a href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub</a></p>
         </article>
 
         <article class="card">
           <h3>Kinetic Monte Carlo for Glassy Lattices (Julia / SLURM)</h3>
-          <p>Rejection‑free KMC engine with a Fenwick‑tree (BIT) cumulative‑rate selector for O(log N) event draws/updates; scaled to 64 cores and ran 48‑hour production jobs on 4096‑site 2D lattices.</p>
+          <p>Rejection‑free KMC engine with a Fenwick‑tree (BIT) cumulative‑rate selector for O(log N) event
+            draws/updates; scaled to 64 cores and ran 48‑hour production jobs on 4096‑site 2D lattices.</p>
           <p><a href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub</a></p>
         </article>
 
         <article class="card">
           <h3>C++20 Self‑Study Mini‑Projects</h3>
-          <p>Differential‑testing harness for DSA problems (randomized generators, oracle vs. impl comparison, property checks), header‑only <code>std::jthread</code> pool with a lock‑free queue, and an LLVM‑IR redundant ϕ‑node elimination pass.</p>
+          <p>Differential‑testing harness for DSA problems (randomized generators, oracle vs. impl comparison, property
+            checks), header‑only <code>std::jthread</code> pool with a lock‑free queue, and an LLVM‑IR redundant ϕ‑node
+            elimination pass.</p>
           <p><a href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub</a></p>
         </article>
       </div>
@@ -131,63 +150,77 @@
 
 
     <section id="publications" class="section container">
-  <h2>Publications</h2>
+      <h2>Publications</h2>
 
-  <ol class="pub-list">
-    <li class="pub" itemscope itemtype="https://schema.org/ScholarlyArticle">
-      <span class="key">[LC25]</span>
-      <span class="authors" itemprop="author">Hanchen Liu</span>, <span class="authors" itemprop="author">Xiao Chen</span>.
-      <cite class="title" itemprop="name">Coherent error induced phase transition</cite>.
-      <span class="venue">arXiv:2506.00650</span> (2025).
-      <span class="links">
-        <a href="https://arxiv.org/abs/2506.00650" target="_blank" rel="noopener noreferrer" aria-label="Open arXiv:2506.00650">arXiv</a>
-      </span>
-    </li>
+      <ol class="pub-list">
+        <li class="pub" itemscope itemtype="https://schema.org/ScholarlyArticle">
+          <span class="key">[LC25]</span>
+          <span class="authors" itemprop="author">Hanchen Liu</span>, <span class="authors" itemprop="author">Xiao
+            Chen</span>.
+          <cite class="title" itemprop="name">Coherent error induced phase transition</cite>.
+          <span class="venue">arXiv:2506.00650</span> (2025).
+          <span class="links">
+            <a href="https://arxiv.org/abs/2506.00650" target="_blank" rel="noopener noreferrer"
+              aria-label="Open arXiv:2506.00650">arXiv</a>
+          </span>
+        </li>
 
-    <li class="pub" itemscope itemtype="https://schema.org/ScholarlyArticle">
-      <span class="key">[LRC25]</span>
-      <span class="authors" itemprop="author">Hanchen Liu</span>, <span class="authors" itemprop="author">Vikram Ravindranath</span>, <span class="authors" itemprop="author">Xiao Chen</span>.
-      <cite class="title" itemprop="name">Quantum entanglement phase transitions and computational complexity: Insights from Ising models</cite>.
-      <span class="venue"><em>Physical Review B</em></span>, <span class="vol">111</span>(2):024312, 2025.
-      <span class="links">
-        <a href="https://doi.org/10.1103/PhysRevB.111.024312" target="_blank" rel="noopener noreferrer" aria-label="Open DOI 10.1103/PhysRevB.111.024312">DOI</a>
-      </span>
-    </li>
+        <li class="pub" itemscope itemtype="https://schema.org/ScholarlyArticle">
+          <span class="key">[LRC25]</span>
+          <span class="authors" itemprop="author">Hanchen Liu</span>, <span class="authors" itemprop="author">Vikram
+            Ravindranath</span>, <span class="authors" itemprop="author">Xiao Chen</span>.
+          <cite class="title" itemprop="name">Quantum entanglement phase transitions and computational complexity:
+            Insights from Ising models</cite>.
+          <span class="venue"><em>Physical Review B</em></span>, <span class="vol">111</span>(2):024312, 2025.
+          <span class="links">
+            <a href="https://doi.org/10.1103/PhysRevB.111.024312" target="_blank" rel="noopener noreferrer"
+              aria-label="Open DOI 10.1103/PhysRevB.111.024312">DOI</a>
+          </span>
+        </li>
 
-    <li class="pub" itemscope itemtype="https://schema.org/ScholarlyArticle">
-      <span class="key">[LC24]</span>
-      <span class="authors" itemprop="author">Hanchen Liu</span>, <span class="authors" itemprop="author">Xiao Chen</span>.
-      <cite class="title" itemprop="name">Plaquette models, cellular automata, and measurement-induced criticality</cite>.
-      <span class="venue"><em>Journal of Physics A: Mathematical and Theoretical</em></span>, <span class="vol">57</span>(43):435003, 2024.
-      <span class="links">
-        <a href="https://doi.org/10.1088/1751-8121/ad82bc" target="_blank" rel="noopener noreferrer" aria-label="Open DOI 10.1088/1751-8121/ad82bc">DOI</a>
-      </span>
-    </li>
+        <li class="pub" itemscope itemtype="https://schema.org/ScholarlyArticle">
+          <span class="key">[LC24]</span>
+          <span class="authors" itemprop="author">Hanchen Liu</span>, <span class="authors" itemprop="author">Xiao
+            Chen</span>.
+          <cite class="title" itemprop="name">Plaquette models, cellular automata, and measurement-induced
+            criticality</cite>.
+          <span class="venue"><em>Journal of Physics A: Mathematical and Theoretical</em></span>, <span
+            class="vol">57</span>(43):435003, 2024.
+          <span class="links">
+            <a href="https://doi.org/10.1088/1751-8121/ad82bc" target="_blank" rel="noopener noreferrer"
+              aria-label="Open DOI 10.1088/1751-8121/ad82bc">DOI</a>
+          </span>
+        </li>
 
-    <li class="pub" itemscope itemtype="https://schema.org/ScholarlyArticle">
-      <span class="key">[LZC22]</span>
-      <span class="authors" itemprop="author">Hanchen Liu</span>, <span class="authors" itemprop="author">Tianci Zhou</span>, <span class="authors" itemprop="author">Xiao Chen</span>.
-      <cite class="title" itemprop="name">Measurement-induced entanglement transition in a two-dimensional shallow circuit</cite>.
-      <span class="venue"><em>Physical Review B</em></span>, <span class="vol">106</span>(14):144311, 2022.
-      <span class="links">
-        <a href="https://doi.org/10.1103/PhysRevB.106.144311" target="_blank" rel="noopener noreferrer" aria-label="Open DOI 10.1103/PhysRevB.106.144311">DOI</a>
-      </span>
-    </li>
-  </ol>
-</section>
+        <li class="pub" itemscope itemtype="https://schema.org/ScholarlyArticle">
+          <span class="key">[LZC22]</span>
+          <span class="authors" itemprop="author">Hanchen Liu</span>, <span class="authors" itemprop="author">Tianci
+            Zhou</span>, <span class="authors" itemprop="author">Xiao Chen</span>.
+          <cite class="title" itemprop="name">Measurement-induced entanglement transition in a two-dimensional shallow
+            circuit</cite>.
+          <span class="venue"><em>Physical Review B</em></span>, <span class="vol">106</span>(14):144311, 2022.
+          <span class="links">
+            <a href="https://doi.org/10.1103/PhysRevB.106.144311" target="_blank" rel="noopener noreferrer"
+              aria-label="Open DOI 10.1103/PhysRevB.106.144311">DOI</a>
+          </span>
+        </li>
+      </ol>
+    </section>
 
 
 
 
 
     <section id="contact" class="section container">
-  <h2>Contact</h2>
-  <ul class="contact-list">
-    <li><a href="mailto:hanchen.liu@bc.edu" aria-label="Email Hanchen">hanchen.liu@bc.edu</a></li>
-    <li><a href="https://github.com/HCPhy" target="_blank" rel="noopener" aria-label="GitHub profile @HCPhy">GitHub @HCPhy</a></li>
-    <li><a href="https://scholar.google.com/citations?user=AejYI-kAAAAJ&hl=en" target="_blank" rel="noopener" aria-label="Google Scholar profile">Google Scholar</a></li>
-  </ul>
-</section>
+      <h2>Contact</h2>
+      <ul class="contact-list">
+        <li><a href="mailto:hanchen.liu@bc.edu" aria-label="Email Hanchen">hanchen.liu@bc.edu</a></li>
+        <li><a href="https://github.com/HCPhy" target="_blank" rel="noopener" aria-label="GitHub profile @HCPhy">GitHub
+            @HCPhy</a></li>
+        <li><a href="https://scholar.google.com/citations?user=AejYI-kAAAAJ&hl=en" target="_blank" rel="noopener"
+            aria-label="Google Scholar profile">Google Scholar</a></li>
+      </ul>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -196,4 +229,5 @@
 
   <script defer src="script.js"></script>
 </body>
+
 </html>
