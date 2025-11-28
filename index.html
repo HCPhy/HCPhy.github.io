@@ -7,12 +7,15 @@
   <title>Hanchen Liu — Quantum Information & HPC</title>
   <meta name="description"
     content="Ph.D. candidate in Physics (Boston College). Quantum information, numerical simulation, and high‑performance computing." />
-  <link rel="icon" href="favicon.ico" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
-    rel="stylesheet">
+  <meta name="keywords"
+    content="quantum information, quantum computing, statistical physics, HPC, high-performance computing, physics, Boston College" />
+  <meta name="author" content="Hanchen Liu" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css" />
   <meta property="og:title" content="Hanchen Liu — Portfolio" />
   <meta property="og:description"
@@ -112,7 +115,7 @@
     </section>
 
 
-    <section id="coding" class="section container">
+    <section id="projects" class="section container">
       <h2>Projects</h2>
       <div class="grid">
         <article class="card">
@@ -125,7 +128,8 @@
         <article class="card">
           <h3>Large‑Scale Quantum Stabilizer Simulator (MATLAB / Shell / SLURM)</h3>
           <p>Parallel stabilizer‑state simulator for 10,000‑qubit systems; achieved ~8× speed‑ups via vectorization and
-            <code>parfor</code> on HPC clusters.</p>
+            <code>parfor</code> on HPC clusters.
+          </p>
           <p><a href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub</a></p>
         </article>
 
@@ -226,6 +230,36 @@
   <footer class="site-footer">
     <div class="container">© <span id="year"></span> Hanchen Liu</div>
   </footer>
+
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Hanchen Liu",
+    "url": "https://hcphy.github.io/",
+    "jobTitle": "Ph.D. Candidate in Physics",
+    "affiliation": {
+      "@type": "Organization",
+      "name": "Boston College"
+    },
+    "email": "hanchen.liu@bc.edu",
+    "sameAs": [
+      "https://github.com/HCPhy",
+      "https://scholar.google.com/citations?user=AejYI-kAAAAJ&hl=en"
+    ],
+    "alumniOf": [
+      {
+        "@type": "Organization",
+        "name": "Stony Brook University"
+      },
+      {
+        "@type": "Organization",
+        "name": "Sichuan University"
+      }
+    ]
+  }
+  </script>
 
   <script defer src="script.js"></script>
 </body>
