@@ -120,10 +120,34 @@ function debounce(func, wait = 10) {
 }
 
 // Apply debouncing to scroll-heavy functions
-// window.addEventListener('scroll', debounce(highlightNavigation, 10)); // Removed
-
 // ============================================
-// Dark Mode Toggle
+// Tab Switching
+// ============================================
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+
+if (tabBtns.length > 0) {
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+
+            // Add active
+            btn.classList.add('active');
+            const tabId = btn.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+
+            // Init specific games if needed
+            if (tabId === 'game-coupling' && window.initRandomCoupling) {
+                requestAnimationFrame(() => {
+                    window.initRandomCoupling();
+                });
+            }
+        });
+    });
+}
+
 // ============================================
 const themeToggle = document.getElementById('theme-toggle');
 const sunIcon = document.querySelector('.sun-icon');

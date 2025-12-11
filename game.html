@@ -57,30 +57,66 @@
 
     <main>
         <section id="game" class="section container">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <h2>Conway's Game of Life</h2>
-                <p>A zero-player game. Draw cells on the grid and click Start. <br>
-                    Based on simple rules, complex behaviors emerge — a perfect example of cellular automata.</p>
+            <!-- Tabs -->
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="game-life">Game of Life</button>
+                <button class="tab-btn" data-tab="game-coupling" id="btn-coupling-tab">Random Coupling Model</button>
             </div>
 
-            <div class="game-container">
-                <div class="controls">
-                    <button id="btn-start" class="btn">Start</button>
-                    <button id="btn-clear" class="btn ghost">Clear</button>
-                    <button id="btn-random" class="btn ghost">Randomize</button>
-                    <div class="control-group">
-                        <label for="speed-range">Speed</label>
-                        <input type="range" id="speed-range" min="1" max="60" value="30">
+            <!-- Tab Content: Game of Life -->
+            <div id="game-life" class="tab-content active">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2>Conway's Game of Life</h2>
+                    <p>A zero-player game. Draw cells on the grid and click Start. <br>
+                        Based on simple rules, complex behaviors emerge — a perfect example of cellular automata.</p>
+                </div>
+
+                <div class="game-container">
+                    <div class="controls">
+                        <button id="btn-start" class="btn">Start</button>
+                        <button id="btn-clear" class="btn ghost">Clear</button>
+                        <button id="btn-random" class="btn ghost">Randomize</button>
+                        <div class="control-group">
+                            <label for="speed-range">Speed</label>
+                            <input type="range" id="speed-range" min="1" max="60" value="30">
+                        </div>
+                    </div>
+
+                    <canvas id="game-canvas"></canvas>
+
+                    <div class="stats">
+                        <span>Generation: <span id="gen-count">0</span></span>
+                        <span>Population: <span id="pop-count">0</span></span>
                     </div>
                 </div>
+            </div>
 
-                <canvas id="game-canvas"></canvas>
+            <!-- Tab Content: Random Coupling -->
+            <div id="game-coupling" class="tab-content">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2>Random Coupling Model</h2>
+                </div>
 
-                <div class="stats">
-                    <span>Generation: <span id="gen-count">0</span></span>
-                    <span>Population: <span id="pop-count">0</span></span>
+                <div class="game-container">
+                    <div class="controls">
+                        <button id="rc-reset" class="btn ghost">Reset All to 5-Body</button>
+                        <div class="control-group">
+                            <span style="font-size: 0.9em; color: var(--color-text-muted);">Processing time scales with
+                                grid size cubed ($N^3$).</span>
+                        </div>
+                    </div>
+
+                    <canvas id="rc-canvas" style="border: 1px solid var(--color-border); cursor: pointer;"></canvas>
+
+                    <div class="stats">
+                        <div class="stats">
+                            <span>Log Degeneracy: <span id="rc-degen">0</span></span>
+                            <span id="rc-size-display">Size: 24x24</span>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </section>
     </main>
 
@@ -101,6 +137,7 @@
 
     <script src="script.js"></script>
     <script src="game.js"></script>
+    <script src="random_coupling.js"></script>
 </body>
 
 </html>
