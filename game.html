@@ -4,9 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Blog — Hanchen Liu</title>
-    <meta name="description" content="Thoughts and technical writings by Hanchen Liu." />
-    <meta name="keywords" content="blog, physics, programming, thoughts" />
+    <title>Game of Life — Hanchen Liu</title>
+    <meta name="description" content="Interactive CONWAY'S GAME OF LIFE simulation." />
     <meta name="author" content="Hanchen Liu" />
 
     <!-- Favicon -->
@@ -15,10 +14,10 @@
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css" />
-    <meta property="og:title" content="Hanchen Liu — Blog" />
-    <meta property="og:description" content="Thoughts and technical writings by Hanchen Liu." />
+    <meta property="og:title" content="Hanchen Liu — Game of Life" />
+    <meta property="og:description" content="Interactive CONWAY'S GAME OF LIFE simulation." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://hcphy.github.io/blog.html" />
+    <meta property="og:url" content="https://hcphy.github.io/game.html" />
 </head>
 
 <body>
@@ -29,8 +28,8 @@
                 <a href="index.html">Home</a>
                 <a href="research.html">Research</a>
                 <a href="projects.html">Projects</a>
-                <a href="blog.html" class="active">Blog</a>
-                <a href="game.html">Game</a>
+                <a href="blog.html">Blog</a>
+                <a href="game.html" class="active">Game</a>
                 <a href="index.html#contact">Contact</a>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
                     <!-- Sun Icon -->
@@ -57,18 +56,30 @@
     </header>
 
     <main>
-        <section id="blog" class="section container">
-            <h2>Blog</h2>
-            <p>Technical notes, tutorials, and research musings.</p>
+        <section id="game" class="section container">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2>Conway's Game of Life</h2>
+                <p>A zero-player game. Draw cells on the grid and click Start. <br>
+                    Based on simple rules, complex behaviors emerge — a perfect example of cellular automata.</p>
+            </div>
 
-            <div class="grid">
-                <article class="card">
-                    <h3><a href="blog/sample-post.html">Sample Post with LaTeX</a></h3>
-                    <p class="meta">December 11, 2025 • Technical</p>
-                    <p>A demonstration of rendering mathematical equations using MathJax.</p>
-                    <a class="btn btn-sm btn-ghost" href="blog/sample-post.html"
-                        style="margin-left:0; margin-top: 1rem;">Read More</a>
-                </article>
+            <div class="game-container">
+                <div class="controls">
+                    <button id="btn-start" class="btn">Start</button>
+                    <button id="btn-clear" class="btn ghost">Clear</button>
+                    <button id="btn-random" class="btn ghost">Randomize</button>
+                    <div class="control-group">
+                        <label for="speed-range">Speed</label>
+                        <input type="range" id="speed-range" min="1" max="60" value="30">
+                    </div>
+                </div>
+
+                <canvas id="game-canvas"></canvas>
+
+                <div class="stats">
+                    <span>Generation: <span id="gen-count">0</span></span>
+                    <span>Population: <span id="pop-count">0</span></span>
+                </div>
             </div>
         </section>
     </main>
@@ -84,7 +95,8 @@
         <div class="container">© <span id="year"></span> Hanchen Liu</div>
     </footer>
 
-    <script defer src="script.js"></script>
+    <script src="script.js"></script>
+    <script src="game.js"></script>
 </body>
 
 </html>

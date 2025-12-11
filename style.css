@@ -802,7 +802,54 @@ code {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+}
+
+/* ============================================
+   Game Section
+   ============================================ */
+.game-container {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+#game-canvas {
+  width: 100%;
+  height: 500px;
+  /* Force height */
+  background-color: var(--color-bg-alt);
+  border-radius: var(--border-radius);
+  cursor: crosshair;
+  border: 1px solid var(--color-border);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: center;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 
 /* Loading state for images */
