@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog — Hanchen Liu</title>
+    <meta name="description" content="Thoughts and technical writings by Hanchen Liu." />
+    <meta name="keywords" content="blog, physics, programming, thoughts" />
+    <meta name="author" content="Hanchen Liu" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+    <meta property="og:title" content="Hanchen Liu — Blog" />
+    <meta property="og:description" content="Thoughts and technical writings by Hanchen Liu." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hcphy.github.io/blog.html" />
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="container">
+            <a class="brand" href="index.html">Hanchen Liu</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="research.html">Research</a>
+                <a href="projects.html">Projects</a>
+                <a href="blog.html" class="active">Blog</a>
+                <a href="index.html#contact">Contact</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <!-- Sun Icon -->
+                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <!-- Moon Icon -->
+                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="blog" class="section container">
+            <h2>Blog</h2>
+            <p>Technical notes, tutorials, and research musings.</p>
+
+            <div class="grid">
+                <article class="card">
+                    <h3><a href="blog/sample-post.html">Sample Post with LaTeX</a></h3>
+                    <p class="meta">December 11, 2025 • Technical</p>
+                    <p>A demonstration of rendering mathematical equations using MathJax.</p>
+                    <a class="btn btn-sm btn-ghost" href="blog/sample-post.html"
+                        style="margin-left:0; margin-top: 1rem;">Read More</a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <button id="back-to-top" class="back-to-top" aria-label="Back to Top">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <footer class="site-footer">
+        <div class="container">© <span id="year"></span> Hanchen Liu</div>
+    </footer>
+
+    <script defer src="script.js"></script>
+</body>
+
+</html>

@@ -48,29 +48,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 // Active Navigation Highlighting
 // ============================================
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
+// ============================================
+// Active Navigation Highlighting (Removed for Multi-page)
+// ============================================
+// The active class is now handled statically in the HTML of each page.
 
-function highlightNavigation() {
-    const scrollPosition = window.pageYOffset + 150;
-
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        const sectionId = section.getAttribute('id');
-
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${sectionId}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
-    });
-}
-
-window.addEventListener('scroll', highlightNavigation);
 
 // ============================================
 // Lazy Loading Images
@@ -138,7 +120,7 @@ function debounce(func, wait = 10) {
 }
 
 // Apply debouncing to scroll-heavy functions
-window.addEventListener('scroll', debounce(highlightNavigation, 10));
+// window.addEventListener('scroll', debounce(highlightNavigation, 10)); // Removed
 
 // ============================================
 // Dark Mode Toggle

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Projects — Hanchen Liu</title>
+    <meta name="description" content="Software and coding projects by Hanchen Liu." />
+    <meta name="keywords" content="software, coding, projects, GitHub, open source" />
+    <meta name="author" content="Hanchen Liu" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+    <meta property="og:title" content="Hanchen Liu — Projects" />
+    <meta property="og:description" content="Software and coding projects by Hanchen Liu." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hcphy.github.io/projects.html" />
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="container">
+            <a class="brand" href="index.html">Hanchen Liu</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="research.html">Research</a>
+                <a href="projects.html" class="active">Projects</a>
+                <a href="blog.html">Blog</a>
+                <a href="index.html#contact">Contact</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <!-- Sun Icon -->
+                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <!-- Moon Icon -->
+                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="projects" class="section container">
+            <h2>Projects</h2>
+            <div class="grid">
+                <article class="card">
+                    <h3>Bit‑Packed Z₂ Linear‑Algebra Library (C / MATLAB‑CMEX)</h3>
+                    <p>High-performance MATLAB MEX library for GF(2) linear algebra, featuring fast matrix
+                        multiplication, null
+                        space
+                        computation, and rank calculation. Supports OpenMP for multi-threaded acceleration and automated
+                        cross-platform compilation.</p>
+                    <footer class="project-links">
+                        <a class="btn btn-sm" href="https://github.com/HCPhy/mex_linear_algebra" target="_blank"
+                            rel="noopener" aria-label="View GF2 Linear Algebra Library on GitHub">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                                style="margin-right: 6px; vertical-align: text-bottom;">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            View Repository
+                        </a>
+                    </footer>
+                </article>
+
+                <article class="card">
+                    <h3>Coherent Error Stabilizer Simulator (MATLAB / Shell / SLURM)</h3>
+                    <p>Matlab simulation on the coherent error phase transition of quantum error correcting codes.
+                        Utilizes
+                        <code>mex_linear_algebra</code> for high-performance GF(2) operations. Computations as seen in
+                        <em>Coherent
+                            error induced phase transition</em> (arXiv:2506.00650).
+                    </p>
+                    <footer class="project-links">
+                        <a class="btn btn-sm" href="https://github.com/HCPhy/CoherentError_Stabilizer" target="_blank"
+                            rel="noopener" aria-label="View Stabilizer Simulator on GitHub">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                                style="margin-right: 6px; vertical-align: text-bottom;">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            View Repository
+                        </a>
+                    </footer>
+                </article>
+
+                <article class="card">
+                    <h3>Continuous Time Monte Carlo for Random Plaquette Models (Julia)</h3>
+                    <p>Exact, rejection‑free CTMC engine (Gillespie/BKL) for random plaquette models. Features a Fenwick
+                        tree
+                        (BIT) for O(log N) updates and scalable Julia implementation for simulating ultraslow dynamics
+                        on large
+                        lattices.</p>
+                    <footer class="project-links">
+                        <a class="btn btn-sm" href="https://github.com/HCPhy/CTMC" target="_blank" rel="noopener"
+                            aria-label="View CTMC Project on GitHub">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                                style="margin-right: 6px; vertical-align: text-bottom;">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            View Repository
+                        </a>
+                    </footer>
+                </article>
+
+                <article class="card">
+                    <h3>Algo Problem Tester (C++)</h3>
+                    <p>Automated differential‑testing harness for competitive programming. Automatically deduces input
+                        types from
+                        function signatures to generate random test cases and compare user solutions against a reference
+                        oracle.</p>
+                    <footer class="project-links">
+                        <a class="btn btn-sm" href="https://github.com/HCPhy/algoProblemTester" target="_blank"
+                            rel="noopener" aria-label="View AlgoProblemTester on GitHub">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                                style="margin-right: 6px; vertical-align: text-bottom;">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            View Repository
+                        </a>
+                    </footer>
+                </article>
+
+                <article class="card">
+                    <h3>LLVM Redundant Phi Elimination (C++)</h3>
+                    <p>Educational out‑of‑tree LLVM pass implementing arithmetic constant folding and redundant ϕ‑node
+                        elimination. Demonstrates `llvm::PatternMatch`, SSA manipulation, and internal pass APIs.</p>
+                    <footer class="project-links">
+                        <a class="btn btn-sm" href="https://github.com/HCPhy/redundant-phi" target="_blank"
+                            rel="noopener" aria-label="View Redundant Phi Project on GitHub">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                                style="margin-right: 6px; vertical-align: text-bottom;">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            View Repository
+                        </a>
+                    </footer>
+                </article>
+
+                <article class="card">
+                    <h3>Lock‑Free Thread Pool (C++20)</h3>
+                    <p>Educational thread pool implementation using C++20 `std::jthread`. Features a lock‑free queue
+                        (Michael‑Scott)
+                        and hazard pointers for safe memory reclamation, aimed at demystifying high‑performance
+                        concurrency.</p>
+                    <footer class="project-links">
+                        <a class="btn btn-sm" href="https://github.com/HCPhy/threadPool" target="_blank" rel="noopener"
+                            aria-label="View Thread Pool Project on GitHub">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                                style="margin-right: 6px; vertical-align: text-bottom;">
+                                <path
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                            </svg>
+                            View Repository
+                        </a>
+                    </footer>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <button id="back-to-top" class="back-to-top" aria-label="Back to Top">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <footer class="site-footer">
+        <div class="container">© <span id="year"></span> Hanchen Liu</div>
+    </footer>
+
+    <script defer src="script.js"></script>
+</body>
+
+</html>
