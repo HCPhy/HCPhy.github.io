@@ -657,6 +657,19 @@ code {
   color: var(--color-text-muted);
 }
 
+/* ============================================
+   Visitor Analytics
+   ============================================ */
+#visitor-map {
+  margin: var(--space-4) auto;
+  text-align: center;
+  max-width: 300px;
+  /* Keep it small and unobtrusive */
+  min-height: 100px;
+  /* Placeholder height */
+  overflow: hidden;
+}
+
 .pub .vol {
   font-weight: var(--font-semibold);
 }
