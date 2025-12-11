@@ -503,12 +503,12 @@ code {
    ============================================ */
 .grid {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-6);
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .research-grid {
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 /* ============================================
@@ -518,7 +518,7 @@ code {
   background-color: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-lg);
-  padding: var(--space-8);
+  padding: var(--space-6);
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
@@ -549,12 +549,14 @@ code {
 
 .card h3 {
   color: var(--color-text);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-lg);
 }
 
 .card p {
   color: var(--color-text-muted);
-  line-height: 1.7;
+  line-height: 1.6;
+  font-size: var(--text-sm);
 }
 
 /* ============================================
@@ -566,21 +568,21 @@ code {
 }
 
 .research-head {
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
 }
 
 .research-head h3 {
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-1);
 }
 
 .meta {
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   color: var(--color-text-muted);
   font-weight: var(--font-medium);
 }
 
 .thumbs {
-  margin: var(--space-6) 0;
+  margin: var(--space-4) 0;
   border-radius: var(--border-radius);
   overflow: hidden;
 }
