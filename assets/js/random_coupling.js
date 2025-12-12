@@ -21,6 +21,9 @@
     let N;
     let WORDS_PER_ROW;
 
+    let nbr4; // Int32Array of size N*4: [up,down,left,right] per site (or -1)
+
+
     // Memory Pools (resizable)
     let A_pool, b_pool, pivotMap, couplings, spins;
 
@@ -41,7 +44,7 @@
         if (rect.width === 0) return;
 
         // target height 500px to match Game of Life
-        rcCanvas.height = 1000;
+        rcCanvas.height = 500;
         rcCanvas.width = rect.width;
 
         RC_ROWS = Math.floor(rcCanvas.height / TARGET_CELL_SIZE);
@@ -51,6 +54,17 @@
         // 800px / 20 = 40. 500 / 20 = 25. N = 1000. Fine.
 
         N = RC_ROWS * RC_COLS;
+        nbr4 = new Int32Array(N * 4);
+        for (let r = 0; r < RC_ROWS; r++) {
+        for (let c = 0; c < RC_COLS; c++) {
+            const idx = r * RC_COLS + c;
+            const base = idx << 2;
+            nbr4[base + 0] = (r > 0) ? (idx - RC_COLS) : -1;                 // up
+            nbr4[base + 1] = (r + 1 < RC_ROWS) ? (idx + RC_COLS) : -1;       // down
+            nbr4[base + 2] = (c > 0) ? (idx - 1) : -1;                       // left
+            nbr4[base + 3] = (c + 1 < RC_COLS) ? (idx + 1) : -1;             // right
+        }
+        }
         WORDS_PER_ROW = Math.ceil(N / 32);
 
         // Re-allocate if size changed significantly or first run
@@ -76,141 +90,125 @@
     // Bit-Packed Gaussian Elimination (Optimized)
     // -------------------------------------------------------------
     function solveGroundState() {
-        // Reset/Clear buffers
-        A_pool.fill(0);
-        b_pool.fill(0);
-        pivotMap.fill(-1);
+    // Clear
+    A_pool.fill(0);
+    b_pool.fill(0);
+    pivotMap.fill(-1); // reuse as pivotColOfRow (row -> pivot col)
 
-        const A = A_pool;
-        const b = b_pool;
+    const A = A_pool;
+    const b = b_pool;
+    const words = WORDS_PER_ROW;
 
-        // Helper to set bit (row, col) in A
-        function setBit(row, col) {
-            const wordIdx = row * WORDS_PER_ROW + (col >>> 5);
-            const bitIdx = col & 31;
-            A[wordIdx] |= (1 << bitIdx);
-        }
+    const bitMask32 = (i) => (1 << (i & 31));          // ok even for 31
+    const wordOf = (i) => (i >>> 5);
 
-        // Helper to set bit in b (row index is bit position)
-        function setB(row, val) {
-            if (!val) return;
-            const wordIdx = row >>> 5;
-            const bitIdx = row & 31;
-            b[wordIdx] |= (1 << bitIdx);
-        }
+    // parity of 32-bit integer (GF(2) dot): returns 0/1
+    const parity32 = (v) => {
+        v ^= v >>> 16;
+        v ^= v >>> 8;
+        v ^= v >>> 4;
+        v &= 0xF;
+        return (0x6996 >>> v) & 1;
+    };
 
-        // Build constraints
-        for (let r = 0; r < RC_ROWS; r++) {
-            for (let c = 0; c < RC_COLS; c++) {
-                const idx = r * RC_COLS + c;
+    // --- Build constraints (no allocations) ---
+    for (let idx = 0; idx < N; idx++) {
+        // set diagonal bit A[idx, idx] = 1
+        A[idx * words + wordOf(idx)] |= bitMask32(idx);
 
-                if (couplings[idx] === 1) {
-                    // Single site: x_idx = 1
-                    setBit(idx, idx);
-                    setB(idx, 1);
-                } else {
-                    // 5-body: Center + N + S + E + W = 0
-                    setBit(idx, idx);
-                    const neighbors = [[r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]];
-                    for (let [nr, nc] of neighbors) {
-                        if (nr >= 0 && nr < RC_ROWS && nc >= 0 && nc < RC_COLS) {
-                            setBit(idx, nr * RC_COLS + nc);
-                        }
-                    }
-                    setB(idx, 0);
-                }
-            }
-        }
+        if (couplings[idx] === 1) {
+        // b[idx] = 1
+        b[wordOf(idx)] |= bitMask32(idx);
+        } else {
+        // add up/down/left/right bits
+        const base = idx << 2;
+        let nb;
 
-        // Gaussian Elimination
-        let pivotRow = 0;
-
-        for (let k = 0; k < N && pivotRow < N; k++) { // Column k
-            // Find pivot
-            const wordOffset = k >>> 5;
-            const bitMask = 1 << (k & 31);
-            let sel = -1;
-
-            for (let row = pivotRow; row < N; row++) {
-                if (A[row * WORDS_PER_ROW + wordOffset] & bitMask) {
-                    sel = row;
-                    break;
-                }
-            }
-
-            if (sel === -1) continue; // Free variable
-
-            // Swap pivotRow and sel
-            if (sel !== pivotRow) {
-                // Swap A rows
-                const start1 = pivotRow * WORDS_PER_ROW;
-                const start2 = sel * WORDS_PER_ROW;
-                for (let w = 0; w < WORDS_PER_ROW; w++) {
-                    let tmp = A[start1 + w];
-                    A[start1 + w] = A[start2 + w];
-                    A[start2 + w] = tmp;
-                }
-                // Swap b bits
-                const w1 = pivotRow >>> 5; const b1 = pivotRow & 31;
-                const w2 = sel >>> 5; const b2 = sel & 31;
-
-                const val1 = (b[w1] >>> b1) & 1;
-                const val2 = (b[w2] >>> b2) & 1;
-
-                if (val1 !== val2) {
-                    b[w1] ^= (1 << b1);
-                    b[w2] ^= (1 << b2);
-                }
-            }
-
-            // Record pivot
-            pivotMap[k] = pivotRow;
-
-            // Eliminate
-            const pStart = pivotRow * WORDS_PER_ROW;
-            const pVal = (b[pivotRow >>> 5] >>> (pivotRow & 31)) & 1;
-
-            for (let row = 0; row < N; row++) {
-                if (row !== pivotRow) {
-                    if (A[row * WORDS_PER_ROW + wordOffset] & bitMask) {
-                        // XOR Row
-                        const rStart = row * WORDS_PER_ROW;
-                        for (let w = 0; w < WORDS_PER_ROW; w++) {
-                            A[rStart + w] ^= A[pStart + w];
-                        }
-                        // XOR b
-                        // const rVal = (b[row >>> 5] >>> (row & 31)) & 1; // Unused
-                        if (pVal !== 0) {
-                            const wb = row >>> 5;
-                            b[wb] ^= (1 << (row & 31));
-                        }
-                    }
-                }
-            }
-            pivotRow++;
-        }
-
-        // Back substitution? 
-        // Since we eliminated above and below (Gauss-Jordan style elimination in loop), 
-        // the matrix is already diagonalized at pivot columns.
-        // x_k = b_pivotRow if k is a pivot column.
-        // x_k = 0 (free) if k is free variable.
-
-        // Update Degeneracy Display
-        const rank = pivotRow;
-        const degeneracy = N - rank;
-        if (degenDisplay) degenDisplay.textContent = degeneracy;
-
-        // Extract Solution
-        spins.fill(0);
-        for (let k = 0; k < N; k++) {
-            const pRow = pivotMap[k];
-            if (pRow !== -1) {
-                spins[k] = (b[pRow >>> 5] >>> (pRow & 31)) & 1;
-            }
+        nb = nbr4[base + 0]; if (nb !== -1) A[idx * words + wordOf(nb)] |= bitMask32(nb);
+        nb = nbr4[base + 1]; if (nb !== -1) A[idx * words + wordOf(nb)] |= bitMask32(nb);
+        nb = nbr4[base + 2]; if (nb !== -1) A[idx * words + wordOf(nb)] |= bitMask32(nb);
+        nb = nbr4[base + 3]; if (nb !== -1) A[idx * words + wordOf(nb)] |= bitMask32(nb);
+        // b[idx] stays 0
         }
     }
 
+    // --- Forward elimination (row echelon) ---
+    let rank = 0;
+
+    for (let col = 0; col < N && rank < N; col++) {
+        const wOff = col >>> 5;
+        const mask = 1 << (col & 31);
+
+        // find pivot row >= rank
+        let sel = -1;
+        for (let r = rank; r < N; r++) {
+        if (A[r * words + wOff] & mask) { sel = r; break; }
+        }
+        if (sel === -1) continue; // free variable
+
+        // swap sel <-> rank
+        if (sel !== rank) {
+        const a1 = rank * words;
+        const a2 = sel * words;
+        for (let w = 0; w < words; w++) {
+            const t = A[a1 + w];
+            A[a1 + w] = A[a2 + w];
+            A[a2 + w] = t;
+        }
+        // swap b bits at row indices rank and sel
+        const wr = rank >>> 5, br = rank & 31;
+        const ws = sel  >>> 5, bs = sel  & 31;
+        const mr = 1 << br, ms = 1 << bs;
+        const vr = (b[wr] & mr) !== 0;
+        const vs = (b[ws] & ms) !== 0;
+        if (vr !== vs) { b[wr] ^= mr; b[ws] ^= ms; }
+        }
+
+        // record pivot column for this pivot row
+        pivotMap[rank] = col;
+
+        // eliminate below
+        const pStart = rank * words;
+        const pB = (b[rank >>> 5] >>> (rank & 31)) & 1;
+
+        for (let r = rank + 1; r < N; r++) {
+        const rStart = r * words;
+        if (A[rStart + wOff] & mask) {
+            for (let w = 0; w < words; w++) {
+            A[rStart + w] ^= A[pStart + w];
+            }
+            if (pB) b[r >>> 5] ^= (1 << (r & 31));
+        }
+        }
+
+        rank++;
+    }
+
+    // degeneracy = N - rank
+    if (degenDisplay) degenDisplay.textContent = (N - rank);
+
+    // --- Back substitution with free vars = 0 ---
+    spins.fill(0);
+    const xWords = new Uint32Array(words); // solution bitset
+
+    for (let i = rank - 1; i >= 0; i--) {
+        const pc = pivotMap[i]; // pivot col
+        // parity of (row_i · x) where x currently has only cols > pc set
+        let par = 0;
+        const rowStart = i * words;
+        for (let w = 0; w < words; w++) {
+        par ^= parity32(A[rowStart + w] & xWords[w]);
+        }
+        const bi = (b[i >>> 5] >>> (i & 31)) & 1;
+        const xi = bi ^ par;
+
+        if (xi) {
+        xWords[pc >>> 5] |= (1 << (pc & 31));
+        spins[pc] = 1;
+        }
+    }
+    }
+    
     function drawRC() {
         rcCtx.clearRect(0, 0, rcCanvas.width, rcCanvas.height);
 
