@@ -697,6 +697,46 @@ code {
 }
 
 /* ============================================
+   Highlights Section
+   ============================================ */
+.highlight-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.highlight-figure {
+  text-align: center;
+  margin: 0;
+  padding: var(--space-6);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  transition: all var(--transition-base);
+}
+
+.highlight-figure:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.highlight-figure img {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  display: block;
+  margin: 0 auto var(--space-4);
+}
+
+.highlight-figure figcaption {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-style: italic;
+  line-height: 1.5;
+  margin-top: var(--space-4);
+}
+
+/* ============================================
    Contact Section
    ============================================ */
 .contact-list {
