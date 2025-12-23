@@ -182,6 +182,7 @@ themeToggle.addEventListener('click', () => {
         moonIcon.style.display = 'block';
     }
 });
+// addEventListener
 
 // ============================================
 // Back to Top Button
