@@ -395,6 +395,42 @@ img {
   color: var(--color-text);
 }
 
+.education-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.education-item {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.school-mark {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.school-mark img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
 .focus-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
