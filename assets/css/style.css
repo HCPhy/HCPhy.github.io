@@ -491,12 +491,34 @@ img {
   margin-bottom: var(--space-8);
 }
 
+.project-grid {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: stretch;
+}
+
 .project-card {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  padding: 0;
 }
 
-.project-card header {
+.project-figure {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-bg-alt);
+  border-bottom: 1px solid var(--color-border);
+  object-fit: cover;
+}
+
+.project-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--space-5);
+}
+
+.project-content header {
   margin-bottom: var(--space-3);
 }
 

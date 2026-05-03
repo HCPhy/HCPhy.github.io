@@ -62,89 +62,114 @@
             <h2>Projects</h2>
             <p class="section-intro">A snapshot of the repositories currently pinned on my GitHub profile: research
                 simulators, numerical tools, and a few C++ systems projects.</p>
-            <div class="grid">
+            <div class="grid project-grid">
                 <article class="card project-card">
-                    <header>
-                        <p class="repo-meta">C · MATLAB MEX · MIT</p>
-                        <h3>mex_linear_algebra</h3>
-                    </header>
-                    <p>Optimized MATLAB MEX functions for GF(2) linear algebra. The library covers bit-packed matrix
-                        multiplication, null-space computation, and rank calculation, with AVX/OpenMP acceleration where
-                        available.</p>
-                    <footer class="project-links">
-                        <a class="btn btn-sm" href="https://github.com/HCPhy/mex_linear_algebra" target="_blank"
-                            rel="noopener" aria-label="View mex_linear_algebra on GitHub">View Repository</a>
-                    </footer>
+                    <img class="project-figure" src="../assets/img/projects/mex-linear-algebra.svg"
+                        alt="Bit-packed matrix and linear-algebra word diagram" loading="lazy" decoding="async" />
+                    <div class="project-content">
+                        <header>
+                            <p class="repo-meta">C · MATLAB MEX · MIT</p>
+                            <h3>mex_linear_algebra</h3>
+                        </header>
+                        <p>Optimized MATLAB MEX functions for GF(2) linear algebra. The library covers bit-packed
+                            matrix multiplication, null-space computation, and rank calculation, with AVX/OpenMP
+                            acceleration where available.</p>
+                        <footer class="project-links">
+                            <a class="btn btn-sm" href="https://github.com/HCPhy/mex_linear_algebra" target="_blank"
+                                rel="noopener" aria-label="View mex_linear_algebra on GitHub">View Repository</a>
+                        </footer>
+                    </div>
                 </article>
 
                 <article class="card project-card">
-                    <header>
-                        <p class="repo-meta">Python · Fork · AGPL-3.0</p>
-                        <h3>ApplyPilot</h3>
-                    </header>
-                    <p>An opinionated fork of ApplyPilot for job discovery and application workflows. This fork narrows
-                        discovery to official employer and academic sources, adds safer review-first flows, and keeps a
-                        firm-centric dashboard for triage.</p>
-                    <footer class="project-links">
-                        <a class="btn btn-sm" href="https://github.com/HCPhy/ApplyPilot" target="_blank" rel="noopener"
-                            aria-label="View ApplyPilot on GitHub">View Repository</a>
-                    </footer>
+                    <img class="project-figure" src="../assets/img/projects/apply-pilot.svg"
+                        alt="Document triage and routed application workflow diagram" loading="lazy" decoding="async" />
+                    <div class="project-content">
+                        <header>
+                            <p class="repo-meta">Python · Fork · AGPL-3.0</p>
+                            <h3>ApplyPilot</h3>
+                        </header>
+                        <p>An opinionated fork of ApplyPilot for job discovery and application workflows. This fork
+                            narrows discovery to official employer and academic sources, adds safer review-first flows,
+                            and keeps a firm-centric dashboard for triage.</p>
+                        <footer class="project-links">
+                            <a class="btn btn-sm" href="https://github.com/HCPhy/ApplyPilot" target="_blank"
+                                rel="noopener" aria-label="View ApplyPilot on GitHub">View Repository</a>
+                        </footer>
+                    </div>
                 </article>
 
                 <article class="card project-card">
-                    <header>
-                        <p class="repo-meta">Julia · Random plaquette model</p>
-                        <h3>CTMC</h3>
-                    </header>
-                    <p>End-to-end implementation of the random plaquette model and a rejection-free continuous-time
-                        Monte Carlo sampler. It uses event-driven BKL/Gillespie dynamics and Fenwick-tree event
-                        selection for large parameter sweeps.</p>
-                    <footer class="project-links">
-                        <a class="btn btn-sm" href="https://github.com/HCPhy/CTMC" target="_blank" rel="noopener"
-                            aria-label="View CTMC on GitHub">View Repository</a>
-                    </footer>
+                    <img class="project-figure" src="../assets/img/projects/ctmc.svg"
+                        alt="Plaquette lattice and continuous-time Monte Carlo event clock" loading="lazy"
+                        decoding="async" />
+                    <div class="project-content">
+                        <header>
+                            <p class="repo-meta">Julia · Random plaquette model</p>
+                            <h3>CTMC</h3>
+                        </header>
+                        <p>End-to-end implementation of the random plaquette model and a rejection-free continuous-time
+                            Monte Carlo sampler. It uses event-driven BKL/Gillespie dynamics and Fenwick-tree event
+                            selection for large parameter sweeps.</p>
+                        <footer class="project-links">
+                            <a class="btn btn-sm" href="https://github.com/HCPhy/CTMC" target="_blank" rel="noopener"
+                                aria-label="View CTMC on GitHub">View Repository</a>
+                        </footer>
+                    </div>
                 </article>
 
                 <article class="card project-card">
-                    <header>
-                        <p class="repo-meta">C++20 · Concurrency</p>
-                        <h3>threadPool</h3>
-                    </header>
-                    <p>An experimental header-only C++20 thread pool built around <code>std::jthread</code>, a
-                        Michael-Scott MPMC queue, hazard pointers, cooperative cancellation, and sanitizer-backed stress
-                        tests.</p>
-                    <footer class="project-links">
-                        <a class="btn btn-sm" href="https://github.com/HCPhy/threadPool" target="_blank" rel="noopener"
-                            aria-label="View threadPool on GitHub">View Repository</a>
-                    </footer>
+                    <img class="project-figure" src="../assets/img/projects/thread-pool.svg"
+                        alt="Queue lanes feeding a group of worker threads" loading="lazy" decoding="async" />
+                    <div class="project-content">
+                        <header>
+                            <p class="repo-meta">C++20 · Concurrency</p>
+                            <h3>threadPool</h3>
+                        </header>
+                        <p>An experimental header-only C++20 thread pool built around <code>std::jthread</code>, a
+                            Michael-Scott MPMC queue, hazard pointers, cooperative cancellation, and sanitizer-backed
+                            stress tests.</p>
+                        <footer class="project-links">
+                            <a class="btn btn-sm" href="https://github.com/HCPhy/threadPool" target="_blank"
+                                rel="noopener" aria-label="View threadPool on GitHub">View Repository</a>
+                        </footer>
+                    </div>
                 </article>
 
                 <article class="card project-card">
-                    <header>
-                        <p class="repo-meta">C++ · Testing harness</p>
-                        <h3>algoProblemTester</h3>
-                    </header>
-                    <p>A small automatic harness for algorithm practice. It deduces input types from a function
-                        signature, generates randomized cases, and compares a user solution against a reference
-                        implementation.</p>
-                    <footer class="project-links">
-                        <a class="btn btn-sm" href="https://github.com/HCPhy/algoProblemTester" target="_blank"
-                            rel="noopener" aria-label="View algoProblemTester on GitHub">View Repository</a>
-                    </footer>
+                    <img class="project-figure" src="../assets/img/projects/algo-problem-tester.svg"
+                        alt="Terminal window with generated test-case results" loading="lazy" decoding="async" />
+                    <div class="project-content">
+                        <header>
+                            <p class="repo-meta">C++ · Testing harness</p>
+                            <h3>algoProblemTester</h3>
+                        </header>
+                        <p>A small automatic harness for algorithm practice. It deduces input types from a function
+                            signature, generates randomized cases, and compares a user solution against a reference
+                            implementation.</p>
+                        <footer class="project-links">
+                            <a class="btn btn-sm" href="https://github.com/HCPhy/algoProblemTester" target="_blank"
+                                rel="noopener" aria-label="View algoProblemTester on GitHub">View Repository</a>
+                        </footer>
+                    </div>
                 </article>
 
                 <article class="card project-card">
-                    <header>
-                        <p class="repo-meta">C++ · LLVM pass</p>
-                        <h3>redundant-phi</h3>
-                    </header>
-                    <p>A minimal out-of-tree LLVM new-pass-manager plugin for arithmetic constant folding and redundant
-                        phi-node elimination. The project is intentionally small, aimed at learning LLVM's pass-builder
-                        interface and SSA manipulation.</p>
-                    <footer class="project-links">
-                        <a class="btn btn-sm" href="https://github.com/HCPhy/redundant-phi" target="_blank"
-                            rel="noopener" aria-label="View redundant-phi on GitHub">View Repository</a>
-                    </footer>
+                    <img class="project-figure" src="../assets/img/projects/redundant-phi.svg"
+                        alt="Control-flow graph merging through a phi node" loading="lazy" decoding="async" />
+                    <div class="project-content">
+                        <header>
+                            <p class="repo-meta">C++ · LLVM pass</p>
+                            <h3>redundant-phi</h3>
+                        </header>
+                        <p>A minimal out-of-tree LLVM new-pass-manager plugin for arithmetic constant folding and
+                            redundant phi-node elimination. The project is intentionally small, aimed at learning LLVM's
+                            pass-builder interface and SSA manipulation.</p>
+                        <footer class="project-links">
+                            <a class="btn btn-sm" href="https://github.com/HCPhy/redundant-phi" target="_blank"
+                                rel="noopener" aria-label="View redundant-phi on GitHub">View Repository</a>
+                        </footer>
+                    </div>
                 </article>
             </div>
         </section>
