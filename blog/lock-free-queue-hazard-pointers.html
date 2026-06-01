@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lock-Free MPMC Queues And Hazard Pointers — Hanchen Liu</title>
+    <meta name="description"
+        content="A review article on Michael-Scott MPMC queues, CAS linearization points, memory ordering, ABA, and hazard-pointer reclamation." />
+    <meta name="author" content="Hanchen Liu" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="container">
+            <a class="brand" href="../index.html">Hanchen Liu</a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../pages/research.html">Research</a>
+                <a href="../pages/projects.html">Projects</a>
+                <a href="../pages/blog.html" class="active">Blog</a>
+                <a href="../pages/game.html">Game</a>
+                <a href="../index.html#contact">Contact</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="section container">
+            <header style="margin-bottom: 2rem;">
+                <a href="../pages/blog.html"
+                    style="font-size: var(--text-sm); margin-bottom: 1rem; display: inline-block;">&larr; Back to
+                    Blog</a>
+                <h1>Lock-Free MPMC Queues And Hazard Pointers</h1>
+                <p class="meta">June 1, 2026 &bull; Interview Review</p>
+            </header>
+
+            <div class="content">
+                <p>This note is my interview-ready explanation of a Michael-Scott-style multi-producer,
+                    multi-consumer queue in C++: where it linearizes, what compare-and-swap actually protects, and why
+                    memory reclamation is a separate problem.</p>
+
+                <div class="review-box">
+                    <p><strong>One-minute project answer.</strong> The core is a Michael-Scott MPMC queue. Enqueue
+                        linearizes when a producer links a new node through `tail-&gt;next`. Dequeue linearizes when a
+                        consumer advances `head` to the next node. The hard part in C++ is not only moving pointers
+                        atomically; removed nodes cannot be deleted immediately because another thread may still hold a
+                        raw pointer. Hazard pointers solve that by letting threads publish the nodes they may
+                        dereference. Removed nodes are retired first and deleted only after a scan proves no hazard
+                        pointer protects them.</p>
+                </div>
+
+                <h2>Queue Shape</h2>
+                <p>The queue uses a dummy head node. With one real value, the shape is:</p>
+
+                <pre><code>head_
+  |
+  v
+[dummy/no value] -&gt; [value A] &lt;- tail_</code></pre>
+
+                <p>On dequeue, the value comes from `head-&gt;next`, not from the old dummy head. A successful dequeue
+                    advances `head_` and retires the old dummy node.</p>
+
+                <pre><code>out = std::move(*next-&gt;value);
+next-&gt;value.reset();
+head_.compare_exchange_strong(h, next, ...);
+retire_or_delete(h);</code></pre>
+
+                <h2>Enqueue Linearization</h2>
+                <p>Enqueue repeatedly snapshots `tail_` and `tail-&gt;next`. If `tail-&gt;next` is null, the observed tail
+                    appears to be the real last node. The producer tries to link its new node there:</p>
+
+                <pre><code>if (next == nullptr) {
+    if (t-&gt;next.compare_exchange_weak(next, n, ...)) {
+        tail_.compare_exchange_strong(t, n, ...);
+        return;
+    }
+}</code></pre>
+
+                <p>The linearization point is the successful CAS on `t-&gt;next`. Advancing `tail_` afterward is helpful
+                    for performance but not what makes the new node reachable.</p>
+
+                <p>If `next != nullptr`, the observed tail is stale. The thread helps move `tail_` forward. This helping
+                    behavior is the lock-free bargain: losing one CAS often means another thread made progress.</p>
+
+                <h2>Dequeue Linearization</h2>
+                <p>Dequeue snapshots `head_`, protects it, reads `head-&gt;next`, and tries to advance `head_`:</p>
+
+                <pre><code>if (next == nullptr) {
+    return false;
+}
+
+if (head_.compare_exchange_strong(h, next, ...)) {
+    out = std::move(*next-&gt;value);
+    next-&gt;value.reset();
+    retire_or_delete(h);
+    return true;
+}</code></pre>
+
+                <p>The linearization point is the successful CAS on `head_`. After that point, this consumer owns the
+                    logical dequeue of that value.</p>
+
+                <h2>Atomics And Memory Ordering</h2>
+                <p>A mutex protects a region of code. An atomic protects operations on one object. In the queue, the
+                    shared state is `head_`, `tail_`, and each node's `next` pointer.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ordering</th>
+                            <th>Mental model</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>`relaxed`</td>
+                            <td>Atomicity only, no ordering for surrounding memory.</td>
+                        </tr>
+                        <tr>
+                            <td>`release`</td>
+                            <td>Publish earlier writes.</td>
+                        </tr>
+                        <tr>
+                            <td>`acquire`</td>
+                            <td>Observe published state so later reads can rely on it.</td>
+                        </tr>
+                        <tr>
+                            <td>`acq_rel`</td>
+                            <td>Acquire plus release, common for read-modify-write operations.</td>
+                        </tr>
+                        <tr>
+                            <td>`seq_cst`</td>
+                            <td>Strongest global ordering, simpler but often more expensive.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>For a queue node, the producer initializes the payload, then publishes the node pointer. A consumer
+                    that acquire-loads the pointer can safely read the initialized payload. Acquire/release is not a
+                    lock; it only synchronizes when the acquire observes the released value.</p>
+
+                <h2>Why Hazard Pointers Exist</h2>
+                <p>Lock-free pointer algorithms still have to decide when it is safe to delete removed nodes. A thread
+                    may load a pointer, get paused, and later dereference it. Meanwhile another thread might remove the
+                    node. Without a reclamation scheme, that is a use-after-free.</p>
+
+                <p>A hazard pointer is a public announcement:</p>
+
+                <pre><code>I may still dereference this node. Do not delete it yet.</code></pre>
+
+                <p>A typical hazard-domain table is an array of atomic pointers. Each participating thread owns one or
+                    more slot IDs, but the slot contents are globally visible so other threads can scan them before
+                    deleting retired nodes.</p>
+
+                <h2>Validation Is Crucial</h2>
+                <p>The pattern is not merely "load pointer, publish pointer." The thread must validate that the pointer
+                    was still current after publication became visible:</p>
+
+                <pre><code>node* t = tail_.load(std::memory_order_acquire);
+hazard_slot.store(t, std::memory_order_release);
+
+if (t != tail_.load(std::memory_order_acquire)) {
+    retry;
+}</code></pre>
+
+                <p>After validation, `t` may still become logically stale, but it cannot be deleted while the hazard
+                    slot contains it. That separates "safe to dereference" from "still the right algorithmic snapshot."
+                </p>
+
+                <h2>ABA And Reclamation</h2>
+                <p>CAS checks whether a pointer value still equals the expected value. It can be fooled if a memory
+                    address goes through an `A -&gt; B -&gt; A` cycle while representing a different object. Hazard pointers
+                    help with the memory-reuse form of ABA by preventing a protected node from being deleted and reused
+                    while a thread might still dereference it.</p>
+
+                <p>Removed nodes go into a retired list. Periodically, the thread snapshots all hazard slots and deletes
+                    only retired nodes that do not appear in that snapshot:</p>
+
+                <pre><code>retired_list = [A, C, X, D]
+hazards      = [A, B, X]
+
+delete C and D
+keep A and X</code></pre>
+
+                <h2>When Lock-Free Is Worth It</h2>
+                <p>Lock-free does not automatically mean faster. A simple mutex queue can win for tiny operations
+                    because the lock-free version pays for CAS retries, cache-line bouncing, per-node allocation,
+                    hazard publication, and scanning. The reason to build and study the lock-free queue is progress
+                    behavior under contention and the correctness problems that appear without a global lock.</p>
+
+                <div class="review-box">
+                    <p><strong>Core intuition.</strong> Many threads repeatedly race to win one small CAS. The enqueue
+                        winner links `tail-&gt;next`; the dequeue winner advances `head_`. Losers retry or help advance
+                        stale pointers. If this thread loses, some other thread usually made progress.</p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">&copy; <span id="year"></span> Hanchen Liu</div>
+    </footer>
+
+    <script src="../assets/js/script.js"></script>
+</body>
+
+</html>

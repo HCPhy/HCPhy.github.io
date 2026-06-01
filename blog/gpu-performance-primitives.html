@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GPU Performance Primitives: Tiling, Scan, Reduction, Roofline — Hanchen Liu</title>
+    <meta name="description"
+        content="Review notes on GPU performance primitives: coalescing, shared-memory tiling, matrix transpose, matmul, reduction, prefix scan, and the roofline model." />
+    <meta name="author" content="Hanchen Liu" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="container">
+            <a class="brand" href="../index.html">Hanchen Liu</a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../pages/research.html">Research</a>
+                <a href="../pages/projects.html">Projects</a>
+                <a href="../pages/blog.html" class="active">Blog</a>
+                <a href="../pages/game.html">Game</a>
+                <a href="../index.html#contact">Contact</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="section container">
+            <header style="margin-bottom: 2rem;">
+                <a href="../pages/blog.html"
+                    style="font-size: var(--text-sm); margin-bottom: 1rem; display: inline-block;">&larr; Back to
+                    Blog</a>
+                <h1>GPU Performance Primitives: Tiling, Scan, Reduction, Roofline</h1>
+                <p class="meta">June 1, 2026 &bull; Interview Review</p>
+            </header>
+
+            <div class="content">
+                <p>For GPU interview practice, I want every kernel explanation to answer four questions: what each
+                    thread computes, what memory pattern it creates, where synchronization or atomics enter, and what
+                    bottleneck I would test first.</p>
+
+                <h2>The Four-Bullet Kernel Drill</h2>
+                <ul>
+                    <li><strong>Thread/data mapping:</strong> Which element, row, tile, or partial result does a thread
+                        own?</li>
+                    <li><strong>Memory access pattern:</strong> Are global loads/stores coalesced? Is reuse staged in
+                        shared memory?</li>
+                    <li><strong>Synchronization or atomics:</strong> Is there block-local cooperation, cross-block
+                        staging, or a contended update?</li>
+                    <li><strong>Bottleneck hypothesis:</strong> Is the first suspect bandwidth, compute, occupancy,
+                        bank conflicts, divergence, launch overhead, or atomics?</li>
+                </ul>
+
+                <h2>Shared-Memory Transpose</h2>
+                <p>Naive matrix transpose has an unavoidable-looking global-memory problem: either the read is coalesced
+                    and the write is strided, or the read is strided and the write is coalesced. Shared-memory tiling
+                    changes the problem.</p>
+
+                <ol>
+                    <li>Read a tile from global memory into shared memory with coalesced access.</li>
+                    <li>Synchronize the block.</li>
+                    <li>Read the tile transposed from shared memory.</li>
+                    <li>Write to global memory with coalesced access.</li>
+                </ol>
+
+                <p>The catch is shared-memory bank conflicts. For a 32-by-32 float tile, transposed access can make many
+                    threads in a warp hit the same bank. Padding changes the stride:</p>
+
+                <pre><code>__shared__ float tile[32][33];</code></pre>
+
+                <p>The extra column spreads accesses over banks and often fixes the worst conflict pattern.</p>
+
+                <h2>Tiled Matrix Multiplication</h2>
+                <p>Naive GPU matrix multiplication reloads values from `A` and `B` from global memory for many output
+                    elements. Tiling uses shared memory for reuse.</p>
+
+                <div class="review-box">
+                    <p><strong>Thirty-second answer.</strong> In naive GPU matmul, each output element reloads many
+                        values from global memory. With tiling, each block cooperatively loads a tile of `A` and `B`
+                        into shared memory, synchronizes, and reuses those values for many multiply-adds. The tradeoff
+                        is that tile size consumes shared memory and registers, so it affects occupancy. The main win is
+                        reduced global-memory traffic.</p>
+                </div>
+
+                <p>Transpose and matmul both use shared memory, but for different reasons. Transpose mainly uses shared
+                    memory to make global writes coalesced. Matmul mainly uses shared memory to reuse loaded data.</p>
+
+                <h2>Reduction</h2>
+                <p>A sum reduction maps each thread to one or more input elements, then reduces partial sums inside a
+                    block. Larger reductions usually write block-level partial sums, then launch another stage or use a
+                    library primitive.</p>
+
+                <pre><code>thread/data mapping:
+  each thread loads one or more elements
+
+memory pattern:
+  coalesced global loads, then shared-memory partials
+
+synchronization:
+  __syncthreads() between tree levels
+
+bottleneck hypothesis:
+  memory bandwidth first, then synchronization and occupancy</code></pre>
+
+                <p>Atomics can be correct for some reductions, but a global atomic hot spot often serializes too much
+                    work. Use them carefully and measure.</p>
+
+                <h2>Prefix Scan</h2>
+                <p>Prefix scan converts values into running totals. The exclusive version starts with zero:</p>
+
+                <pre><code>input:     [3, 1, 7, 0, 4, 1, 6, 3]
+exclusive: [0, 3, 4, 11, 11, 15, 16, 22]</code></pre>
+
+                <p>A sequential scan has a loop-carried dependency. GPU scan restructures the work as a tree:</p>
+
+                <ol>
+                    <li>Load a chunk into shared memory.</li>
+                    <li>Up-sweep to build partial sums.</li>
+                    <li>Set the final total to zero for exclusive scan.</li>
+                    <li>Down-sweep to distribute prefixes.</li>
+                    <li>Store the scanned result.</li>
+                </ol>
+
+                <p>For arrays larger than one block, scan each block independently, write block sums, scan those block
+                    sums, and add scanned block offsets back to each chunk.</p>
+
+                <p>Scan matters because it turns independent local decisions into compact output positions. That is why
+                    it shows up in stream compaction, radix sort, groupby output placement, and hash join materialization.
+                </p>
+
+                <h2>Roofline Model</h2>
+                <p>The roofline model asks whether a kernel is limited by memory bandwidth or compute throughput. The
+                    key quantity is arithmetic intensity:</p>
+
+                <pre><code>I = FLOPs / bytes moved</code></pre>
+
+                <p>If peak memory bandwidth is `B`, then memory bandwidth can support at most `I * B` FLOPs per second.
+                    If peak compute throughput is `P_max`, the bound is:</p>
+
+                <pre><code>P &lt;= min(I * B, P_max)</code></pre>
+
+                <p>Low arithmetic intensity usually means memory-bound. High arithmetic intensity can become
+                    compute-bound. Real kernels often land below the roof because of bad coalescing, cache misses,
+                    register spills, low occupancy, branch divergence, synchronization overhead, or insufficient
+                    parallelism.</p>
+
+                <h2>Production Instinct</h2>
+                <p>For standard primitives such as scan, sort, reduction, and dense linear algebra, start with tuned
+                    libraries such as CUB, Thrust, or cuBLAS. Hand-written kernels are worth discussing when the goal is
+                    learning, fusion with a custom operator, unusual data layout, or a performance experiment with a
+                    clear measurement plan.</p>
+
+                <div class="review-box">
+                    <p><strong>Review sentence.</strong> I would first state the thread mapping and memory pattern,
+                        then identify the likely bottleneck, then say what I would profile and change. That keeps the
+                        answer grounded in measurement instead of GPU folklore.</p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">&copy; <span id="year"></span> Hanchen Liu</div>
+    </footer>
+
+    <script src="../assets/js/script.js"></script>
+</body>
+
+</html>

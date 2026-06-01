@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Autograd For Systems Interviews — Hanchen Liu</title>
+    <meta name="description"
+        content="A systems-oriented review of reverse-mode autodiff, micrograd-style scalar graphs, and the bridge to PyTorch execution." />
+    <meta name="author" content="Hanchen Liu" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="container">
+            <a class="brand" href="../index.html">Hanchen Liu</a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../pages/research.html">Research</a>
+                <a href="../pages/projects.html">Projects</a>
+                <a href="../pages/blog.html" class="active">Blog</a>
+                <a href="../pages/game.html">Game</a>
+                <a href="../index.html#contact">Contact</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="section container">
+            <header style="margin-bottom: 2rem;">
+                <a href="../pages/blog.html"
+                    style="font-size: var(--text-sm); margin-bottom: 1rem; display: inline-block;">&larr; Back to
+                    Blog</a>
+                <h1>Autograd For Systems Interviews</h1>
+                <p class="meta">June 1, 2026 &bull; Interview Review</p>
+            </header>
+
+            <div class="content">
+                <p>For a systems role, I do not need a model-zoo tour. I need a concrete explanation of reverse-mode
+                    autodiff, how a tiny engine stores the computation graph, and why tensor placement and data movement
+                    matter once this becomes PyTorch on a GPU.</p>
+
+                <div class="review-box">
+                    <p><strong>Thirty-second answer.</strong> Reverse-mode autodiff builds a graph during the forward
+                        pass. Each operation stores a local rule for propagating an upstream gradient to its inputs.
+                        Backward seeds the final scalar output with gradient 1, walks nodes in reverse topological
+                        order, and accumulates gradients into parameters by the chain rule.</p>
+                </div>
+
+                <h2>The Scalar Value Object</h2>
+                <p>A micrograd-style engine starts with a scalar `Value` object:</p>
+
+                <pre><code>Value:
+  data
+  grad
+  parents / previous nodes
+  operation label
+  local backward function</code></pre>
+
+                <p>Operations create new `Value` nodes and remember how to backpropagate through themselves. For
+                    example:</p>
+
+                <ul>
+                    <li>If `z = x + y`, then `dz/dx = 1` and `dz/dy = 1`.</li>
+                    <li>If `z = x * y`, then `dz/dx = y` and `dz/dy = x`.</li>
+                    <li>If `z = x^n`, then `dz/dx = n * x^(n-1)`.</li>
+                    <li>If `z = relu(x)`, then the local gradient is `1` when `x &gt; 0` and `0` otherwise.</li>
+                </ul>
+
+                <h2>Why Topological Order</h2>
+                <p>The graph is a DAG. A node's gradient may receive contributions from multiple downstream paths, so
+                    backward must visit children before parents. A topological traversal records a legal dependency
+                    order; reversing it gives the backpropagation order.</p>
+
+                <p>Gradients accumulate with `+=`, not assignment, because a single value can influence the output along
+                    multiple paths:</p>
+
+                <pre><code>d = a * b
+e = a + d
+f = d * e</code></pre>
+
+                <p>Here `d` affects `f` directly and through `e`, and `a` affects the result both directly and through
+                    `d`.</p>
+
+                <h2>Why Seed The Output With 1</h2>
+                <p>If the final scalar loss is `L`, then `dL/dL = 1`. Backward starts from that identity and repeatedly
+                    applies the chain rule through local operations.</p>
+
+                <pre><code>loss.grad = 1.0
+for node in reversed(topo):
+    node._backward()</code></pre>
+
+                <p>Before a new backward pass, gradients must be reset. Otherwise, gradients from the previous training
+                    step remain and contaminate the next update.</p>
+
+                <h2>From Value To MLP</h2>
+                <p>A tiny neural network stack can be built from the same scalar object:</p>
+
+                <pre><code>Neuron:
+  weights: list[Value]
+  bias: Value
+  activation: dot(weights, inputs) + bias
+
+Layer:
+  list[Neuron]
+
+MLP:
+  list[Layer]
+  parameters(): recursively collect weights and biases</code></pre>
+
+                <p>The training loop is conceptually simple: forward pass, scalar loss, zero gradients, backward pass,
+                    gradient descent update, repeat.</p>
+
+                <h2>PyTorch Bridge</h2>
+                <p>PyTorch scales this idea from scalar toy graphs to tensor operations and optimized kernels. The
+                    review vocabulary I want warm:</p>
+
+                <ul>
+                    <li>tensors, shapes, broadcasting</li>
+                    <li>`requires_grad`, `grad_fn`, `.backward()`, `.grad`</li>
+                    <li>`nn.Module`, `parameters()`, `zero_grad()`</li>
+                    <li>optimizer loop: forward, loss, backward, step</li>
+                    <li>CPU vs GPU tensor placement</li>
+                    <li>why host-device data movement can dominate runtime</li>
+                    <li>why PyTorch calls CUDA kernels and libraries underneath</li>
+                </ul>
+
+                <h2>Systems Angle</h2>
+                <p>The systems questions are not only "what is backprop?" They are also: where does the data live, when
+                    does it move, what kernels are launched, what gets fused, and whether the computation is bandwidth
+                    or compute limited.</p>
+
+                <p>For GPU execution, moving tensors back and forth between CPU and GPU inside a training loop can erase
+                    the benefit of acceleration. The right mental model is ownership and placement: keep tensors on the
+                    device across repeated operations, move only at boundaries, and profile before guessing.</p>
+
+                <h2>Review Questions</h2>
+                <ul>
+                    <li>What is a computation graph?</li>
+                    <li>Why does reverse-mode need reverse topological order?</li>
+                    <li>Why does each operation store a local backward closure?</li>
+                    <li>Why do gradients accumulate with `+=`?</li>
+                    <li>Why does `zero_grad()` exist?</li>
+                    <li>How does a toy `Neuron -&gt; Layer -&gt; MLP` map to a small PyTorch-like API?</li>
+                    <li>Why can CPU/GPU data movement dominate simple models?</li>
+                </ul>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">&copy; <span id="year"></span> Hanchen Liu</div>
+    </footer>
+
+    <script src="../assets/js/script.js"></script>
+</body>
+
+</html>

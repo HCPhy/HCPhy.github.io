@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CUDA Fundamentals For Systems Interviews — Hanchen Liu</title>
+    <meta name="description"
+        content="A review article on CUDA host/device code, grids, blocks, warps, memory hierarchy, synchronization, and compilation." />
+    <meta name="author" content="Hanchen Liu" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="container">
+            <a class="brand" href="../index.html">Hanchen Liu</a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../pages/research.html">Research</a>
+                <a href="../pages/projects.html">Projects</a>
+                <a href="../pages/blog.html" class="active">Blog</a>
+                <a href="../pages/game.html">Game</a>
+                <a href="../index.html#contact">Contact</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="section container">
+            <header style="margin-bottom: 2rem;">
+                <a href="../pages/blog.html"
+                    style="font-size: var(--text-sm); margin-bottom: 1rem; display: inline-block;">&larr; Back to
+                    Blog</a>
+                <h1>CUDA Fundamentals For Systems Interviews</h1>
+                <p class="meta">June 1, 2026 &bull; Interview Review</p>
+            </header>
+
+            <div class="content">
+                <p>This is the compact version of my CUDA basics notes: enough vocabulary to explain a kernel, reason
+                    about memory behavior, and know where synchronization actually happens.</p>
+
+                <div class="review-box">
+                    <p><strong>Thirty-second answer.</strong> CUDA programs have host code and device code. Host code
+                        runs on the CPU: it allocates device memory, copies inputs, launches kernels, checks errors,
+                        synchronizes when it needs results, and copies data back. Device code runs on the GPU as
+                        kernels. A launch creates a grid of thread blocks; blocks contain threads; NVIDIA hardware
+                        executes threads in warps of 32 using SIMT execution. Performance usually comes down to memory
+                        traffic, coalescing, occupancy, divergence, and synchronization overhead.</p>
+                </div>
+
+                <h2>Host, Device, Kernel</h2>
+                <p>A CUDA kernel is a function that runs on the GPU. The CPU launches it with the triple-chevron syntax:
+                </p>
+
+                <pre><code>add_one&lt;&lt;&lt;blocks, threads_per_block&gt;&gt;&gt;(d_x, d_y, n);</code></pre>
+
+                <p>The host call is asynchronous with respect to the CPU thread. The CPU can continue immediately while
+                    the GPU executes queued work. The host only knows the work is complete after an explicit wait or an
+                    operation that implies a wait.</p>
+
+                <pre><code>add_one&lt;&lt;&lt;blocks, threads&gt;&gt;&gt;(d_x, d_y, n);
+cudaDeviceSynchronize();
+cudaMemcpy(h_y, d_y, n * sizeof(int), cudaMemcpyDeviceToHost);</code></pre>
+
+                <p>Common synchronization points are `cudaDeviceSynchronize()`, `cudaStreamSynchronize(stream)`,
+                    event synchronization, and blocking device-to-host copies in the same stream.</p>
+
+                <h2>Grid, Block, Thread, Warp</h2>
+                <p>A kernel launch creates a grid. A grid contains blocks. A block contains threads. Blocks are assigned
+                    to streaming multiprocessors, or SMs, and each block stays on one SM until it finishes. Inside the
+                    SM, warp schedulers issue instructions from ready warps.</p>
+
+                <pre><code>int i = blockIdx.x * blockDim.x + threadIdx.x;</code></pre>
+
+                <p>For 2D data, the same idea maps naturally onto rows and columns:</p>
+
+                <pre><code>int col = blockIdx.x * blockDim.x + threadIdx.x;
+int row = blockIdx.y * blockDim.y + threadIdx.y;
+int idx = row * width + col;</code></pre>
+
+                <p>Grid-stride loops are useful when the problem is larger than the total number of launched threads:
+                </p>
+
+                <pre><code>for (int i = blockIdx.x * blockDim.x + threadIdx.x;
+     i &lt; n;
+     i += blockDim.x * gridDim.x) {
+    y[i] = x[i] + 1;
+}</code></pre>
+
+                <p>The important correctness rule is that blocks are independent. They may run in parallel, serially, or
+                    in any order. A normal kernel should not depend on block execution order.</p>
+
+                <h2>Occupancy And Resources</h2>
+                <p>More than one block can reside on an SM if resources allow. The limiting resource might be threads,
+                    warps, blocks, registers, or shared memory. For example, if a block uses 256 threads, 32 registers
+                    per thread, and 16 KB of shared memory, the SM must have room for all of that before another block
+                    can be resident.</p>
+
+                <p>Occupancy is useful because ready warps can hide latency. It is not a goal by itself. A kernel with
+                    very high occupancy can still be slow if every warp makes scattered memory requests or waits on
+                    heavy synchronization.</p>
+
+                <h2>Memory Hierarchy</h2>
+                <p>A practical CUDA memory model:</p>
+
+                <pre><code>global memory / VRAM
+  - cached through shared L2 and often per-SM L1
+
+shared memory
+  - on-chip scratchpad
+  - allocated per block
+  - explicit and programmer-managed
+
+registers
+  - private logical storage per thread
+  - allocated from each SM's physical register file</code></pre>
+
+                <p>Caches are mostly automatic. You influence them through access patterns. Shared memory is different:
+                    the program explicitly stages data there and synchronizes before other threads use it.</p>
+
+                <pre><code>__shared__ float tile[256];
+
+int tid = threadIdx.x;
+tile[tid] = input[blockIdx.x * blockDim.x + tid];
+__syncthreads();
+
+float x = tile[tid];</code></pre>
+
+                <p>Dynamic shared memory is declared as an unsized array and sized at launch:</p>
+
+                <pre><code>extern __shared__ int temp[];
+
+block_scan&lt;&lt;&lt;blocks, threads, 2 * threads * sizeof(int)&gt;&gt;&gt;(d_in, d_out);</code></pre>
+
+                <h2>Coalescing And Warps</h2>
+                <p>A warp has 32 threads. Coalescing is reasoned about at warp level. Neighboring threads should usually
+                    access neighboring memory addresses so the hardware can service requests with fewer aligned memory
+                    transactions.</p>
+
+                <pre><code>// Good: neighboring threads read neighboring floats.
+float v = x[blockIdx.x * blockDim.x + threadIdx.x];
+
+// Usually bad: neighboring threads jump by stride.
+float w = x[(blockIdx.x * blockDim.x + threadIdx.x) * stride];</code></pre>
+
+                <p>This is cache-line-like thinking, but the CUDA term is global-memory coalescing.</p>
+
+                <h2>Managed Memory And Explicit Copies</h2>
+                <p>`cudaMallocManaged` creates one pointer usable by CPU and GPU. The runtime migrates pages between
+                    CPU memory and GPU memory as needed. That is convenient, but it is not free. If the CPU and GPU
+                    repeatedly alternate touching the same pages, migration can dominate runtime.</p>
+
+                <p>For predictable movement, explicit ownership is often clearer:</p>
+
+                <pre><code>cudaMalloc(&amp;d_A, bytes);
+cudaMemcpy(d_A, h_A, bytes, cudaMemcpyHostToDevice);
+
+kernel&lt;&lt;&lt;blocks, threads&gt;&gt;&gt;(d_A);
+
+cudaMemcpy(h_A, d_A, bytes, cudaMemcpyDeviceToHost);
+cudaFree(d_A);</code></pre>
+
+                <p>In C++, wrap device allocations with RAII and a custom deleter if possible. A normal
+                    `std::unique_ptr&lt;T[]&gt;` calls `delete[]`, not `cudaFree`.</p>
+
+                <h2>Compilation Model</h2>
+                <p>`nvcc` separates host and device compilation. Host code becomes normal CPU machine code. Device code
+                    goes through NVIDIA's compiler pipeline:</p>
+
+                <pre><code>CUDA C++ device code
+  -&gt; NVVM IR
+  -&gt; optimized IR
+  -&gt; PTX
+  -&gt; ptxas or driver JIT
+  -&gt; SASS / cubin</code></pre>
+
+                <p>PTX is virtual GPU assembly. SASS is architecture-specific GPU machine code. A fat binary can contain
+                    native cubins for some architectures plus PTX fallback for driver JIT compilation.</p>
+
+                <h2>Review Checklist</h2>
+                <ul>
+                    <li>What runs on the CPU, and what runs on the GPU?</li>
+                    <li>How does a thread compute its global index?</li>
+                    <li>Why should neighboring threads access neighboring addresses?</li>
+                    <li>What is the difference between cache and shared memory?</li>
+                    <li>What does `cudaDeviceSynchronize()` wait for?</li>
+                    <li>Why check kernel launch errors?</li>
+                    <li>How can high register use reduce occupancy?</li>
+                </ul>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">&copy; <span id="year"></span> Hanchen Liu</div>
+    </footer>
+
+    <script src="../assets/js/script.js"></script>
+</body>
+
+</html>
