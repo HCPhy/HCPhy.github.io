@@ -8,58 +8,71 @@
     <meta name="description" content="Software and coding projects by Hanchen Liu." />
     <meta name="keywords" content="software, coding, projects, GitHub, open source" />
     <meta name="author" content="Hanchen Liu" />
+    <link rel="canonical" href="https://hcphy.github.io/pages/projects.html" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
 
     <!-- Stylesheet -->
+    <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
     <meta property="og:title" content="Hanchen Liu — Projects" />
     <meta property="og:description" content="Software and coding projects by Hanchen Liu." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://hcphy.github.io/projects.html" />
+    <meta property="og:url" content="https://hcphy.github.io/pages/projects.html" />
+    <meta property="og:site_name" content="Hanchen Liu" />
+    <meta property="og:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Hanchen Liu — Projects" />
+    <meta name="twitter:description" content="Scientific software, numerical tools, and C++ systems projects." />
+    <meta name="twitter:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta name="twitter:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
-        <nav class="container">
+        <nav class="container" aria-label="Primary navigation">
             <a class="brand" href="../index.html">Hanchen Liu</a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="research.html">Research</a>
-                <a href="projects.html" class="active">Projects</a>
+                <a href="projects.html" class="active" aria-current="page">Projects</a>
                 <a href="blog.html">Blog</a>
                 <a href="game.html">Game</a>
                 <a href="../index.html#contact">Contact</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <!-- Sun Icon -->
-                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <!-- Moon Icon -->
-                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
             </div>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+                <!-- Sun Icon -->
+                <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <!-- Moon Icon -->
+                <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <section id="projects" class="section container">
             <p class="eyebrow">Pinned on GitHub</p>
-            <h2>Projects</h2>
+            <h1 class="page-title">Projects</h1>
             <p class="section-intro">A snapshot of the repositories currently pinned on my GitHub profile: research
                 simulators, numerical tools, and a few C++ systems projects.</p>
             <div class="grid project-grid">
@@ -69,7 +82,7 @@
                     <div class="project-content">
                         <header>
                             <p class="repo-meta">C · MATLAB MEX · MIT</p>
-                            <h3>mex_linear_algebra</h3>
+                            <h2>mex_linear_algebra</h2>
                         </header>
                         <p>Optimized MATLAB MEX functions for GF(2) linear algebra. The library covers bit-packed
                             matrix multiplication, null-space computation, and rank calculation, with AVX/OpenMP
@@ -87,7 +100,7 @@
                     <div class="project-content">
                         <header>
                             <p class="repo-meta">Python · Fork · AGPL-3.0</p>
-                            <h3>ApplyPilot</h3>
+                            <h2>ApplyPilot</h2>
                         </header>
                         <p>An opinionated fork of ApplyPilot for job discovery and application workflows. This fork
                             narrows discovery to official employer and academic sources, adds safer review-first flows,
@@ -106,7 +119,7 @@
                     <div class="project-content">
                         <header>
                             <p class="repo-meta">Julia · Random plaquette model</p>
-                            <h3>CTMC</h3>
+                            <h2>CTMC</h2>
                         </header>
                         <p>End-to-end implementation of the random plaquette model and a rejection-free continuous-time
                             Monte Carlo sampler. It uses event-driven BKL/Gillespie dynamics and Fenwick-tree event
@@ -124,7 +137,7 @@
                     <div class="project-content">
                         <header>
                             <p class="repo-meta">C++20 · Concurrency</p>
-                            <h3>threadPool</h3>
+                            <h2>threadPool</h2>
                         </header>
                         <p>An experimental header-only C++20 thread pool built around <code>std::jthread</code>, a
                             Michael-Scott MPMC queue, hazard pointers, cooperative cancellation, and sanitizer-backed
@@ -142,7 +155,7 @@
                     <div class="project-content">
                         <header>
                             <p class="repo-meta">C++ · Testing harness</p>
-                            <h3>algoProblemTester</h3>
+                            <h2>algoProblemTester</h2>
                         </header>
                         <p>A small automatic harness for algorithm practice. It deduces input types from a function
                             signature, generates randomized cases, and compares a user solution against a reference
@@ -160,7 +173,7 @@
                     <div class="project-content">
                         <header>
                             <p class="repo-meta">C++ · LLVM pass</p>
-                            <h3>redundant-phi</h3>
+                            <h2>redundant-phi</h2>
                         </header>
                         <p>A minimal out-of-tree LLVM new-pass-manager plugin for arithmetic constant folding and
                             redundant phi-node elimination. The project is intentionally small, aimed at learning LLVM's
@@ -175,7 +188,7 @@
         </section>
     </main>
 
-    <button id="back-to-top" class="back-to-top" aria-label="Back to Top">
+    <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
         <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
@@ -188,7 +201,7 @@
             <a class="visitor-counter" href="https://github.com/HCPhy/HCPhy.github.io/graphs/traffic" target="_blank"
                 rel="noopener" aria-label="Open GitHub traffic insights">
                 <img src="https://visitor-badge.one9x.com/badge?page_id=HCPhy.github.io&amp;unique=true&amp;timeframe=86400&amp;left_text=unique%20visits&amp;left_color=gray&amp;right_color=teal"
-                    alt="visitor counter" loading="lazy" />
+                    alt="visitor counter" width="150" height="20" loading="lazy" referrerpolicy="no-referrer" />
             </a>
         </div>
     </footer>

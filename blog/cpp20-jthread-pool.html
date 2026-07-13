@@ -8,52 +8,90 @@
     <meta name="description"
         content="A review article on wrapping a lock-free queue in a C++20 jthread pool with futures, stop tokens, condition variables, and shutdown safety." />
     <meta name="author" content="Hanchen Liu" />
+    <link rel="canonical" href="https://hcphy.github.io/blog/cpp20-jthread-pool.html" />
     <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
+    <meta property="og:title" content="C++20 jthread Pool: Futures, Wakeups, and Shutdown — Hanchen Liu" />
+    <meta property="og:description" content="A review of C++20 jthread pools, futures, stop tokens, condition variables, and safe shutdown." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://hcphy.github.io/blog/cpp20-jthread-pool.html" />
+    <meta property="og:site_name" content="Hanchen Liu" />
+    <meta property="og:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <meta property="article:published_time" content="2026-06-01" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="C++20 jthread Pool" />
+    <meta name="twitter:description" content="Futures, wakeups, stop tokens, and shutdown safety in a C++20 thread pool." />
+    <meta name="twitter:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta name="twitter:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "C++20 jthread Pool: Futures, Wakeups, And Shutdown",
+      "description": "A review article on wrapping a lock-free queue in a C++20 jthread pool with futures, stop tokens, condition variables, and shutdown safety.",
+      "image": "https://hcphy.github.io/assets/img/og-card.png",
+      "datePublished": "2026-06-01",
+      "dateModified": "2026-07-13",
+      "author": {
+        "@type": "Person",
+        "name": "Hanchen Liu",
+        "url": "https://hcphy.github.io/"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hcphy.github.io/blog/cpp20-jthread-pool.html"
+      }
+    }
+    </script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
-        <nav class="container">
+        <nav class="container" aria-label="Primary navigation">
             <a class="brand" href="../index.html">Hanchen Liu</a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="../pages/research.html">Research</a>
                 <a href="../pages/projects.html">Projects</a>
-                <a href="../pages/blog.html" class="active">Blog</a>
+                <a href="../pages/blog.html" class="active" aria-current="location">Blog</a>
                 <a href="../pages/game.html">Game</a>
                 <a href="../index.html#contact">Contact</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
             </div>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+                <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <article class="section container">
-            <header style="margin-bottom: 2rem;">
+            <header class="article-header">
                 <a href="../pages/blog.html"
-                    style="font-size: var(--text-sm); margin-bottom: 1rem; display: inline-block;">&larr; Back to
+                    class="back-link">&larr; Back to
                     Blog</a>
                 <h1>C++20 jthread Pool: Futures, Wakeups, And Shutdown</h1>
-                <p class="meta">June 1, 2026 &bull; Interview Review</p>
+                <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
             </header>
 
             <div class="content">
@@ -85,19 +123,19 @@ destructor:
                 <p>The queue answers: how do producers and consumers safely push and pop tasks? The pool answers: when
                     do workers exist, sleep, wake, accept work, reject work, and stop?</p>
 
-                <h2>Why `std::jthread`</h2>
-                <p>`std::jthread` is C++20's RAII-friendly thread type. Destroying a `jthread` requests cooperative stop
-                    and joins. A worker function can accept a live `std::stop_token`:</p>
+                <h2>Why <code>std::jthread</code></h2>
+                <p><code>std::jthread</code> is C++20's RAII-friendly thread type. Destroying a <code>jthread</code> requests cooperative stop
+                    and joins. A worker function can accept a live <code>std::stop_token</code>:</p>
 
                 <pre><code>workers_.emplace_back([this](std::stop_token st) {
     worker_loop_(st);
 });</code></pre>
 
-                <p>The token is not a snapshot. It is a handle into the thread's stop state, so `st.stop_requested()`
+                <p>The token is not a snapshot. It is a handle into the thread's stop state, so <code>st.stop_requested()</code>
                     reflects later stop requests.</p>
 
                 <h2>Submit Flow</h2>
-                <p>`submit()` converts any callable plus arguments into a queued zero-argument task and returns a future
+                <p><code>submit()</code> converts any callable plus arguments into a queued zero-argument task and returns a future
                     to the caller.</p>
 
                 <pre><code>F + Args...
@@ -109,14 +147,14 @@ destructor:
                 <p>The important pieces:</p>
 
                 <ul>
-                    <li>`std::invoke_result_t&lt;F, Args...&gt;` deduces the return type.</li>
+                    <li><code>std::invoke_result_t&lt;F, Args...&gt;</code> deduces the return type.</li>
                     <li>Forwarding references preserve lvalues and rvalues when building the task.</li>
-                    <li>`std::packaged_task&lt;R()&gt;` connects execution to a future.</li>
-                    <li>`std::future&lt;R&gt;` lets the caller wait, receive the result, or rethrow the task exception.</li>
-                    <li>A `shared_ptr` around the packaged task makes the wrapper copyable for `std::function`.</li>
+                    <li><code>std::packaged_task&lt;R()&gt;</code> connects execution to a future.</li>
+                    <li><code>std::future&lt;R&gt;</code> lets the caller wait, receive the result, or rethrow the task exception.</li>
+                    <li>A <code>shared_ptr</code> around the packaged task makes the wrapper copyable for <code>std::function</code>.</li>
                 </ul>
 
-                <p>Using `shared_ptr` here is separate from queue-node reclamation. `shared_ptr` is convenient for the
+                <p>Using <code>shared_ptr</code> here is separate from queue-node reclamation. <code>shared_ptr</code> is convenient for the
                     packaged task object. Hazard pointers are used for queue nodes because reference-count updates on
                     every hot-path pointer copy would change the performance and progress story.</p>
 
@@ -127,7 +165,7 @@ destructor:
     task();
 }</code></pre>
 
-                <p>The `while`, rather than `if`, matters. If a worker handled one task and immediately slept, work
+                <p>The <code>while</code>, rather than <code>if</code>, matters. If a worker handled one task and immediately slept, work
                     already in the queue might not cause another wake event.</p>
 
                 <p>The pool-level stop flag implements graceful shutdown: reject future submissions, finish accepted
@@ -136,7 +174,7 @@ destructor:
 
                 <h2>Condition Variables</h2>
                 <p>A condition variable is a sleep/wakeup mechanism, not the source of truth for work. The source of
-                    truth remains `q_.try_dequeue(task)`.</p>
+                    truth remains <code>q_.try_dequeue(task)</code>.</p>
 
                 <pre><code>cv_.wait(lock, predicate);</code></pre>
 
@@ -150,13 +188,14 @@ destructor:
 pool stop requested
 wake_seq changed since this worker last slept</code></pre>
 
-                <p>`notify_one()` is natural after one submit because one new task usually needs one worker.
-                    `notify_all()` is natural during shutdown because every worker must wake, observe stop, drain or
+                <p><code>notify_one()</code> is natural after one submit because one new task usually needs one worker.
+                    <code>notify_all()</code> is natural during shutdown because every worker must wake, observe stop, drain or
                     exit, and allow the destructor to join.</p>
 
                 <h2>Two Stop Systems</h2>
                 <p>There are two related but distinct notions of stop:</p>
 
+                <div class="table-scroll" role="region" aria-label="Thread-pool stop mechanisms" tabindex="0">
                 <table>
                     <thead>
                         <tr>
@@ -166,22 +205,23 @@ wake_seq changed since this worker last slept</code></pre>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Pool-level `stop_`</td>
+                            <td>Pool-level <code>stop_</code></td>
                             <td>The pool lifecycle: reject new work and gracefully drain accepted work.</td>
                         </tr>
                         <tr>
-                            <td>`std::jthread` stop token</td>
-                            <td>The thread object's cooperative stop state, requested by `jthread` destruction or
-                                `request_stop()`.</td>
+                            <td><code>std::jthread</code> stop token</td>
+                            <td>The thread object's cooperative stop state, requested by <code>jthread</code> destruction or
+                                <code>request_stop()</code>.</td>
                         </tr>
                     </tbody>
                 </table>
+                </div>
 
-                <p>A `std::stop_callback` can wake the condition variable if a `jthread` stop is requested while the
+                <p>A <code>std::stop_callback</code> can wake the condition variable if a <code>jthread</code> stop is requested while the
                     worker sleeps.</p>
 
                 <h2>Lifecycle Locks</h2>
-                <p>If the queue is already thread-safe, a submit mutex is not protecting `q_.enqueue()`. It protects the
+                <p>If the queue is already thread-safe, a submit mutex is not protecting <code>q_.enqueue()</code>. It protects the
                     lifecycle boundary: can this task still be accepted?</p>
 
                 <pre><code>submit_mutex_:
@@ -192,13 +232,13 @@ cv_mutex_:
   condition-variable wake boundary
   "has a wake event happened since this worker last checked?"</code></pre>
 
-                <p>Without a submit/shutdown boundary, one thread could observe `stop_ == false`, another thread could
+                <p>Without a submit/shutdown boundary, one thread could observe <code>stop_ == false</code>, another thread could
                     stop and join all workers, and then the first thread could enqueue a task after workers are gone.
                     The queue would remain structurally correct, but the returned future might never complete.</p>
 
                 <h2>When This Pool Is The Right Story</h2>
                 <p>A custom lock-free queue thread pool is not the default tool for dense numerical loops. Better
-                    defaults are OpenMP, TBB, `std::execution`, Kokkos, BLAS/LAPACK, cuBLAS, Thrust, or existing
+                    defaults are OpenMP, TBB, <code>std::execution</code>, Kokkos, BLAS/LAPACK, cuBLAS, Thrust, or existing
                     executor frameworks. The custom pool is most useful as a learning and systems-design project:
                     MPMC queues, hazard pointers, futures, shutdown, condition variables, and progress under
                     contention.</p>
@@ -217,7 +257,7 @@ cv_mutex_:
         <div class="container">&copy; <span id="year"></span> Hanchen Liu</div>
     </footer>
 
-    <script src="../assets/js/script.js"></script>
+    <script defer src="../assets/js/script.js"></script>
 </body>
 
 </html>

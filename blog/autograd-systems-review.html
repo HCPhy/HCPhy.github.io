@@ -8,52 +8,90 @@
     <meta name="description"
         content="A systems-oriented review of reverse-mode autodiff, micrograd-style scalar graphs, and the bridge to PyTorch execution." />
     <meta name="author" content="Hanchen Liu" />
+    <link rel="canonical" href="https://hcphy.github.io/blog/autograd-systems-review.html" />
     <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
+    <meta property="og:title" content="Autograd for Systems Interviews — Hanchen Liu" />
+    <meta property="og:description" content="A systems-oriented review of reverse-mode autodiff, scalar graphs, and PyTorch execution." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://hcphy.github.io/blog/autograd-systems-review.html" />
+    <meta property="og:site_name" content="Hanchen Liu" />
+    <meta property="og:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <meta property="article:published_time" content="2026-06-01" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Autograd for Systems Interviews" />
+    <meta name="twitter:description" content="Reverse-mode autodiff, scalar graphs, and the systems bridge to PyTorch." />
+    <meta name="twitter:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta name="twitter:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Autograd For Systems Interviews",
+      "description": "A systems-oriented review of reverse-mode autodiff, micrograd-style scalar graphs, and the bridge to PyTorch execution.",
+      "image": "https://hcphy.github.io/assets/img/og-card.png",
+      "datePublished": "2026-06-01",
+      "dateModified": "2026-07-13",
+      "author": {
+        "@type": "Person",
+        "name": "Hanchen Liu",
+        "url": "https://hcphy.github.io/"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hcphy.github.io/blog/autograd-systems-review.html"
+      }
+    }
+    </script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
-        <nav class="container">
+        <nav class="container" aria-label="Primary navigation">
             <a class="brand" href="../index.html">Hanchen Liu</a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="../pages/research.html">Research</a>
                 <a href="../pages/projects.html">Projects</a>
-                <a href="../pages/blog.html" class="active">Blog</a>
+                <a href="../pages/blog.html" class="active" aria-current="location">Blog</a>
                 <a href="../pages/game.html">Game</a>
                 <a href="../index.html#contact">Contact</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
             </div>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+                <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <article class="section container">
-            <header style="margin-bottom: 2rem;">
+            <header class="article-header">
                 <a href="../pages/blog.html"
-                    style="font-size: var(--text-sm); margin-bottom: 1rem; display: inline-block;">&larr; Back to
+                    class="back-link">&larr; Back to
                     Blog</a>
                 <h1>Autograd For Systems Interviews</h1>
-                <p class="meta">June 1, 2026 &bull; Interview Review</p>
+                <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
             </header>
 
             <div class="content">
@@ -69,7 +107,7 @@
                 </div>
 
                 <h2>The Scalar Value Object</h2>
-                <p>A micrograd-style engine starts with a scalar `Value` object:</p>
+                <p>A micrograd-style engine starts with a scalar <code>Value</code> object:</p>
 
                 <pre><code>Value:
   data
@@ -78,14 +116,14 @@
   operation label
   local backward function</code></pre>
 
-                <p>Operations create new `Value` nodes and remember how to backpropagate through themselves. For
+                <p>Operations create new <code>Value</code> nodes and remember how to backpropagate through themselves. For
                     example:</p>
 
                 <ul>
-                    <li>If `z = x + y`, then `dz/dx = 1` and `dz/dy = 1`.</li>
-                    <li>If `z = x * y`, then `dz/dx = y` and `dz/dy = x`.</li>
-                    <li>If `z = x^n`, then `dz/dx = n * x^(n-1)`.</li>
-                    <li>If `z = relu(x)`, then the local gradient is `1` when `x &gt; 0` and `0` otherwise.</li>
+                    <li>If <code>z = x + y</code>, then <code>dz/dx = 1</code> and <code>dz/dy = 1</code>.</li>
+                    <li>If <code>z = x * y</code>, then <code>dz/dx = y</code> and <code>dz/dy = x</code>.</li>
+                    <li>If <code>z = x^n</code>, then <code>dz/dx = n * x^(n-1)</code>.</li>
+                    <li>If <code>z = relu(x)</code>, then the local gradient is <code>1</code> when <code>x &gt; 0</code> and <code>0</code> otherwise.</li>
                 </ul>
 
                 <h2>Why Topological Order</h2>
@@ -93,18 +131,18 @@
                     backward must visit children before parents. A topological traversal records a legal dependency
                     order; reversing it gives the backpropagation order.</p>
 
-                <p>Gradients accumulate with `+=`, not assignment, because a single value can influence the output along
+                <p>Gradients accumulate with <code>+=</code>, not assignment, because a single value can influence the output along
                     multiple paths:</p>
 
                 <pre><code>d = a * b
 e = a + d
 f = d * e</code></pre>
 
-                <p>Here `d` affects `f` directly and through `e`, and `a` affects the result both directly and through
-                    `d`.</p>
+                <p>Here <code>d</code> affects <code>f</code> directly and through <code>e</code>, and <code>a</code> affects the result both directly and through
+                    <code>d</code>.</p>
 
                 <h2>Why Seed The Output With 1</h2>
-                <p>If the final scalar loss is `L`, then `dL/dL = 1`. Backward starts from that identity and repeatedly
+                <p>If the final scalar loss is <code>L</code>, then <code>dL/dL = 1</code>. Backward starts from that identity and repeatedly
                     applies the chain rule through local operations.</p>
 
                 <pre><code>loss.grad = 1.0
@@ -138,8 +176,8 @@ MLP:
 
                 <ul>
                     <li>tensors, shapes, broadcasting</li>
-                    <li>`requires_grad`, `grad_fn`, `.backward()`, `.grad`</li>
-                    <li>`nn.Module`, `parameters()`, `zero_grad()`</li>
+                    <li><code>requires_grad</code>, <code>grad_fn</code>, <code>.backward()</code>, <code>.grad</code></li>
+                    <li><code>nn.Module</code>, <code>parameters()</code>, <code>zero_grad()</code></li>
                     <li>optimizer loop: forward, loss, backward, step</li>
                     <li>CPU vs GPU tensor placement</li>
                     <li>why host-device data movement can dominate runtime</li>
@@ -160,9 +198,9 @@ MLP:
                     <li>What is a computation graph?</li>
                     <li>Why does reverse-mode need reverse topological order?</li>
                     <li>Why does each operation store a local backward closure?</li>
-                    <li>Why do gradients accumulate with `+=`?</li>
-                    <li>Why does `zero_grad()` exist?</li>
-                    <li>How does a toy `Neuron -&gt; Layer -&gt; MLP` map to a small PyTorch-like API?</li>
+                    <li>Why do gradients accumulate with <code>+=</code>?</li>
+                    <li>Why does <code>zero_grad()</code> exist?</li>
+                    <li>How does a toy <code>Neuron -&gt; Layer -&gt; MLP</code> map to a small PyTorch-like API?</li>
                     <li>Why can CPU/GPU data movement dominate simple models?</li>
                 </ul>
             </div>
@@ -173,7 +211,7 @@ MLP:
         <div class="container">&copy; <span id="year"></span> Hanchen Liu</div>
     </footer>
 
-    <script src="../assets/js/script.js"></script>
+    <script defer src="../assets/js/script.js"></script>
 </body>
 
 </html>

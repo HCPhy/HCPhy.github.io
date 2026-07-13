@@ -8,130 +8,135 @@
     <meta name="description" content="Thoughts and technical writings by Hanchen Liu." />
     <meta name="keywords" content="blog, physics, programming, thoughts" />
     <meta name="author" content="Hanchen Liu" />
+    <link rel="canonical" href="https://hcphy.github.io/pages/blog.html" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
 
     <!-- Stylesheet -->
+    <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
     <meta property="og:title" content="Hanchen Liu — Blog" />
     <meta property="og:description" content="Thoughts and technical writings by Hanchen Liu." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://hcphy.github.io/blog.html" />
+    <meta property="og:url" content="https://hcphy.github.io/pages/blog.html" />
+    <meta property="og:site_name" content="Hanchen Liu" />
+    <meta property="og:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Hanchen Liu — Blog" />
+    <meta name="twitter:description" content="Technical notes on scientific computing, GPU performance, and systems programming." />
+    <meta name="twitter:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta name="twitter:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
-        <nav class="container">
+        <nav class="container" aria-label="Primary navigation">
             <a class="brand" href="../index.html">Hanchen Liu</a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="research.html">Research</a>
                 <a href="projects.html">Projects</a>
-                <a href="blog.html" class="active">Blog</a>
+                <a href="blog.html" class="active" aria-current="page">Blog</a>
                 <a href="game.html">Game</a>
                 <a href="../index.html#contact">Contact</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <!-- Sun Icon -->
-                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <!-- Moon Icon -->
-                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
             </div>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+                <!-- Sun Icon -->
+                <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <!-- Moon Icon -->
+                <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <section id="blog" class="section container">
-            <h2>Blog</h2>
-            <p>Technical notes, tutorials, and research musings.</p>
+            <h1 class="page-title">Blog</h1>
+            <p class="page-intro">Technical notes on scientific computing, performance engineering, and the systems ideas behind research software.</p>
 
-            <div class="grid">
-                <article class="card">
-                    <h3><a href="../blog/cuda-interview-fundamentals.html">CUDA Fundamentals For Systems Interviews</a></h3>
-                    <p class="meta">June 1, 2026 &bull; Interview Review</p>
+            <div class="grid blog-grid">
+                <article class="card blog-card">
+                    <h2><a href="../blog/cuda-interview-fundamentals.html">CUDA Fundamentals For Systems Interviews</a></h2>
+                    <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
                     <p>A compact review of host/device code, grids, blocks, warps, memory hierarchy, synchronization,
                         and CUDA compilation.</p>
                     <a class="btn btn-sm btn-ghost" href="../blog/cuda-interview-fundamentals.html"
-                        style="margin-left:0; margin-top: 1rem;">Read More</a>
+                        aria-label="Read CUDA Fundamentals for Systems Interviews">Read article</a>
                 </article>
 
-                <article class="card">
-                    <h3><a href="../blog/gpu-performance-primitives.html">GPU Performance Primitives: Tiling, Scan,
-                            Reduction, Roofline</a></h3>
-                    <p class="meta">June 1, 2026 &bull; Interview Review</p>
+                <article class="card blog-card">
+                    <h2><a href="../blog/gpu-performance-primitives.html">GPU Performance Primitives: Tiling, Scan,
+                            Reduction, Roofline</a></h2>
+                    <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
                     <p>Review notes for explaining GPU kernels through thread mapping, memory access, synchronization,
                         and bottleneck hypotheses.</p>
                     <a class="btn btn-sm btn-ghost" href="../blog/gpu-performance-primitives.html"
-                        style="margin-left:0; margin-top: 1rem;">Read More</a>
+                        aria-label="Read GPU Performance Primitives">Read article</a>
                 </article>
 
-                <article class="card">
-                    <h3><a href="../blog/lock-free-queue-hazard-pointers.html">Lock-Free MPMC Queues And Hazard
-                            Pointers</a></h3>
-                    <p class="meta">June 1, 2026 &bull; Interview Review</p>
+                <article class="card blog-card">
+                    <h2><a href="../blog/lock-free-queue-hazard-pointers.html">Lock-Free MPMC Queues And Hazard
+                            Pointers</a></h2>
+                    <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
                     <p>A walkthrough of Michael-Scott queues, CAS linearization points, memory ordering, ABA, and
                         hazard-pointer reclamation.</p>
                     <a class="btn btn-sm btn-ghost" href="../blog/lock-free-queue-hazard-pointers.html"
-                        style="margin-left:0; margin-top: 1rem;">Read More</a>
+                        aria-label="Read Lock-Free MPMC Queues and Hazard Pointers">Read article</a>
                 </article>
 
-                <article class="card">
-                    <h3><a href="../blog/cpp20-jthread-pool.html">C++20 jthread Pool: Futures, Wakeups, And Shutdown</a>
-                    </h3>
-                    <p class="meta">June 1, 2026 &bull; Interview Review</p>
+                <article class="card blog-card">
+                    <h2><a href="../blog/cpp20-jthread-pool.html">C++20 jthread Pool: Futures, Wakeups, And Shutdown</a>
+                    </h2>
+                    <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
                     <p>The thread-pool layer around a queue: packaged tasks, futures, stop tokens, condition variables,
                         graceful shutdown, and lifecycle locks.</p>
                     <a class="btn btn-sm btn-ghost" href="../blog/cpp20-jthread-pool.html"
-                        style="margin-left:0; margin-top: 1rem;">Read More</a>
+                        aria-label="Read C++20 jthread Pool">Read article</a>
                 </article>
 
-                <article class="card">
-                    <h3><a href="../blog/performance-engineering-gf2-ctmc.html">Performance Engineering Lessons From
-                            GF(2) Linear Algebra And CTMC</a></h3>
-                    <p class="meta">June 1, 2026 &bull; Interview Review</p>
+                <article class="card blog-card">
+                    <h2><a href="../blog/performance-engineering-gf2-ctmc.html">Performance Engineering Lessons From
+                            GF(2) Linear Algebra And CTMC</a></h2>
+                    <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
                     <p>How bit-packing, M4RI-style table methods, layout experiments, and Fenwick-tree CTMC checks fit
                         into one engineering loop.</p>
                     <a class="btn btn-sm btn-ghost" href="../blog/performance-engineering-gf2-ctmc.html"
-                        style="margin-left:0; margin-top: 1rem;">Read More</a>
+                        aria-label="Read Performance Engineering Lessons from GF(2) Linear Algebra and CTMC">Read article</a>
                 </article>
 
-                <article class="card">
-                    <h3><a href="../blog/autograd-systems-review.html">Autograd For Systems Interviews</a></h3>
-                    <p class="meta">June 1, 2026 &bull; Interview Review</p>
+                <article class="card blog-card">
+                    <h2><a href="../blog/autograd-systems-review.html">Autograd For Systems Interviews</a></h2>
+                    <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
                     <p>A systems-oriented refresher on reverse-mode autodiff, micrograd-style scalar graphs, PyTorch
                         vocabulary, and GPU placement.</p>
                     <a class="btn btn-sm btn-ghost" href="../blog/autograd-systems-review.html"
-                        style="margin-left:0; margin-top: 1rem;">Read More</a>
-                </article>
-
-                <article class="card">
-                    <h3><a href="../blog/sample-post.html">Sample Post with LaTeX</a></h3>
-                    <p class="meta">December 11, 2025 • Technical</p>
-                    <p>A demonstration of rendering mathematical equations using MathJax.</p>
-                    <a class="btn btn-sm btn-ghost" href="../blog/sample-post.html"
-                        style="margin-left:0; margin-top: 1rem;">Read More</a>
+                        aria-label="Read Autograd for Systems Interviews">Read article</a>
                 </article>
             </div>
         </section>
     </main>
 
-    <button id="back-to-top" class="back-to-top" aria-label="Back to Top">
+    <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
         <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
@@ -144,7 +149,7 @@
             <a class="visitor-counter" href="https://github.com/HCPhy/HCPhy.github.io/graphs/traffic" target="_blank"
                 rel="noopener" aria-label="Open GitHub traffic insights">
                 <img src="https://visitor-badge.one9x.com/badge?page_id=HCPhy.github.io&amp;unique=true&amp;timeframe=86400&amp;left_text=unique%20visits&amp;left_color=gray&amp;right_color=teal"
-                    alt="visitor counter" loading="lazy" />
+                    alt="visitor counter" width="150" height="20" loading="lazy" referrerpolicy="no-referrer" />
             </a>
         </div>
     </footer>

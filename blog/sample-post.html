@@ -7,77 +7,80 @@
     <title>Sample Post with LaTeX — Hanchen Liu</title>
     <meta name="description" content="A demonstration of LaTeX math rendering." />
     <meta name="author" content="Hanchen Liu" />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href="https://hcphy.github.io/blog/sample-post.html" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
 
     <!-- Stylesheet -->
+    <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
 
     <!-- MathJax -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
-        <nav class="container">
+        <nav class="container" aria-label="Primary navigation">
             <a class="brand" href="../index.html">Hanchen Liu</a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="../pages/research.html">Research</a>
                 <a href="../pages/projects.html">Projects</a>
-                <a href="../pages/blog.html" class="active">Blog</a>
+                <a href="../pages/blog.html" class="active" aria-current="location">Blog</a>
                 <a href="../pages/game.html">Game</a>
                 <a href="../index.html#contact">Contact</a>
 
                 <!-- Logic needs js to handle theme toggle across pages, simplified here -->
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <!-- Sun Icon -->
-                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <!-- Moon Icon -->
-                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
             </div>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+                <!-- Sun Icon -->
+                <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <!-- Moon Icon -->
+                <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <article class="section container">
-            <header style="margin-bottom: 2rem;">
+            <header class="article-header">
                 <a href="../pages/blog.html"
-                    style="font-size: var(--text-sm); margin-bottom: 1rem; display: inline-block;">&larr; Back to
+                    class="back-link">&larr; Back to
                     Blog</a>
                 <h1>Sample Post with LaTeX</h1>
-                <p class="meta">December 11, 2025</p>
+                <p class="meta"><time datetime="2025-12-11">December 11, 2025</time></p>
             </header>
 
             <div class="content">
                 <p>This is a sample blog post to demonstrate how equations are rendered using MathJax.</p>
 
-                <h3>Inline Math</h3>
+                <h2>Inline Math</h2>
                 <p>Einstein's mass-energy equivalence formula is given by \( E = mc^2 \). Isn't that neat?</p>
 
-                <h3>Display Math</h3>
+                <h2>Display Math</h2>
                 <p>Here is the Schrödinger equation:</p>
                 $$ i\hbar \frac{\partial}{\partial t} \Psi(\mathbf{r}, t) = \hat{H} \Psi(\mathbf{r}, t) $$
 
-                <h3>More Complex Math</h3>
+                <h2>More Complex Math</h2>
                 <p>We can also write matrices and integrals:</p>
                 $$
                 \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
@@ -98,7 +101,7 @@
         <div class="container">© <span id="year"></span> Hanchen Liu</div>
     </footer>
 
-    <script src="../assets/js/script.js"></script>
+    <script defer src="../assets/js/script.js"></script>
 </body>
 
 </html>

@@ -4,123 +4,145 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Game of Life — Hanchen Liu</title>
-    <meta name="description" content="Interactive CONWAY'S GAME OF LIFE simulation." />
+    <title>Interactive Models — Hanchen Liu</title>
+    <meta name="description" content="Explore Conway's Game of Life and a random-coupling GF(2) model." />
     <meta name="author" content="Hanchen Liu" />
+    <link rel="canonical" href="https://hcphy.github.io/pages/game.html" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
 
     <!-- Stylesheet -->
+    <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
-    <meta property="og:title" content="Hanchen Liu — Game of Life" />
-    <meta property="og:description" content="Interactive CONWAY'S GAME OF LIFE simulation." />
+    <meta property="og:title" content="Hanchen Liu — Interactive Models" />
+    <meta property="og:description" content="Explore Conway's Game of Life and a random-coupling GF(2) model." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://hcphy.github.io/game.html" />
+    <meta property="og:url" content="https://hcphy.github.io/pages/game.html" />
+    <meta property="og:site_name" content="Hanchen Liu" />
+    <meta property="og:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Hanchen Liu — Interactive Models" />
+    <meta name="twitter:description" content="Explore Conway's Game of Life and a random-coupling GF(2) model." />
+    <meta name="twitter:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta name="twitter:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
-        <nav class="container">
+        <nav class="container" aria-label="Primary navigation">
             <a class="brand" href="../index.html">Hanchen Liu</a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="research.html">Research</a>
                 <a href="projects.html">Projects</a>
                 <a href="blog.html">Blog</a>
-                <a href="game.html" class="active">Game</a>
+                <a href="game.html" class="active" aria-current="page">Game</a>
                 <a href="../index.html#contact">Contact</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <!-- Sun Icon -->
-                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <!-- Moon Icon -->
-                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
             </div>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+                <!-- Sun Icon -->
+                <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <!-- Moon Icon -->
+                <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <section id="game" class="section container">
+            <h1 class="page-title">Interactive Models</h1>
+            <p class="page-intro">Explore how simple local rules create global structure. Both models support mouse, touch, and keyboard input.</p>
+
             <!-- Tabs -->
-            <div class="tab-nav">
-                <button class="tab-btn active" data-tab="game-life">Game of Life</button>
-                <button class="tab-btn" data-tab="game-coupling" id="btn-coupling-tab">Random Coupling Model</button>
+            <div class="tab-nav" role="tablist" aria-label="Interactive model">
+                <button class="tab-btn active" type="button" role="tab" id="tab-life" data-tab="game-life"
+                    aria-controls="game-life" aria-selected="true">Game of Life</button>
+                <button class="tab-btn" type="button" role="tab" id="tab-coupling" data-tab="game-coupling"
+                    aria-controls="game-coupling" aria-selected="false" tabindex="-1">Random Coupling Model</button>
             </div>
 
             <!-- Tab Content: Game of Life -->
-            <div id="game-life" class="tab-content active">
-                <div style="text-align: center; margin-bottom: 2rem;">
+            <div id="game-life" class="tab-content active" role="tabpanel" aria-labelledby="tab-life">
+                <div class="game-intro">
                     <h2>Conway's Game of Life</h2>
-                    <p>A zero-player game. Draw cells on the grid and click Start. <br>
-                        Based on simple rules, complex behaviors emerge — a perfect example of cellular automata.</p>
+                    <p>Draw or erase cells, then press Start. Use the arrow keys to move the focused cell and Space or Enter to toggle it.</p>
                 </div>
 
                 <div class="game-container">
                     <div class="controls">
-                        <button id="btn-start" class="btn">Start</button>
-                        <button id="btn-clear" class="btn ghost">Clear</button>
-                        <button id="btn-random" class="btn ghost">Randomize</button>
+                        <button id="btn-start" class="btn" type="button">Start</button>
+                        <button id="btn-step" class="btn ghost" type="button">Step</button>
+                        <button id="btn-clear" class="btn ghost" type="button">Clear</button>
+                        <button id="btn-random" class="btn ghost" type="button">Randomize</button>
                         <div class="control-group">
                             <label for="speed-range">Speed</label>
-                            <input type="range" id="speed-range" min="1" max="60" value="30">
+                            <input type="range" id="speed-range" min="1" max="60" value="30" aria-valuetext="30 generations per second">
                         </div>
                     </div>
 
-                    <canvas id="game-canvas"></canvas>
+                    <p id="life-instructions" class="visually-hidden">Use arrow keys to move across the grid. Press Space or Enter to switch the focused cell between alive and dead.</p>
+                    <canvas id="game-canvas" tabindex="0" role="application" aria-label="Editable Conway's Game of Life grid"
+                        aria-describedby="life-instructions">Your browser does not support the interactive canvas.</canvas>
 
-                    <div class="stats">
+                    <div class="stats" aria-label="Simulation statistics">
                         <span>Generation: <span id="gen-count">0</span></span>
                         <span>Population: <span id="pop-count">0</span></span>
                     </div>
+                    <p id="game-announcement" class="visually-hidden" role="status" aria-live="polite"></p>
                 </div>
             </div>
 
             <!-- Tab Content: Random Coupling -->
-            <div id="game-coupling" class="tab-content">
-                <div style="text-align: center; margin-bottom: 2rem;">
+            <div id="game-coupling" class="tab-content" role="tabpanel" aria-labelledby="tab-coupling" hidden>
+                <div class="game-intro">
                     <h2>Random Coupling Model</h2>
+                    <p>Toggle lattice sites to replace a five-body constraint with a one-body coupling, then inspect the resulting GF(2) solution.</p>
                 </div>
 
                 <div class="game-container">
                     <div class="controls">
-                        <button id="rc-reset" class="btn ghost">Reset All to 5-Body</button>
+                        <button id="rc-reset" class="btn ghost" type="button">Reset all to five-body</button>
                         <div class="control-group">
-                            <span style="font-size: 0.9em; color: var(--color-text-muted);">Processing time scales with
-                                grid size cubed ($N^3$).</span>
+                            <span class="game-note">Processing time scales with grid size cubed (<var>N</var><sup>3</sup>).</span>
                         </div>
                     </div>
 
-                    <canvas id="rc-canvas" style="border: 1px solid var(--color-border); cursor: pointer;"></canvas>
+                    <p id="coupling-instructions" class="visually-hidden">Use arrow keys to move across the lattice. Press Space or Enter to toggle the focused coupling.</p>
+                    <canvas id="rc-canvas" tabindex="0" role="application" aria-label="Interactive random-coupling lattice"
+                        aria-describedby="coupling-instructions">Your browser does not support the interactive canvas.</canvas>
 
-                    <div class="stats">
-                        <div class="stats">
-                            <span>Log Degeneracy: <span id="rc-degen">0</span></span>
-                            <span id="rc-size-display">Size: 24x24</span>
-                        </div>
+                    <div class="stats" aria-label="Model result">
+                        <span><span id="rc-result-label">Log degeneracy</span>: <span id="rc-degen">0</span></span>
+                        <span>Size: <span id="rc-size-display">—</span></span>
                     </div>
+                    <p id="rc-announcement" class="visually-hidden" role="status" aria-live="polite"></p>
                 </div>
             </div>
 
         </section>
     </main>
 
-    <button id="back-to-top" class="back-to-top" aria-label="Back to Top">
+    <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
         <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
@@ -133,14 +155,14 @@
             <a class="visitor-counter" href="https://github.com/HCPhy/HCPhy.github.io/graphs/traffic" target="_blank"
                 rel="noopener" aria-label="Open GitHub traffic insights">
                 <img src="https://visitor-badge.one9x.com/badge?page_id=HCPhy.github.io&amp;unique=true&amp;timeframe=86400&amp;left_text=unique%20visits&amp;left_color=gray&amp;right_color=teal"
-                    alt="visitor counter" loading="lazy" />
+                    alt="visitor counter" width="150" height="20" loading="lazy" referrerpolicy="no-referrer" />
             </a>
         </div>
     </footer>
 
-    <script src="../assets/js/script.js"></script>
-    <script src="../assets/js/game.js"></script>
-    <script src="../assets/js/random_coupling.js"></script>
+    <script defer src="../assets/js/script.js"></script>
+    <script defer src="../assets/js/game.js"></script>
+    <script defer src="../assets/js/random_coupling.js"></script>
 </body>
 
 </html>

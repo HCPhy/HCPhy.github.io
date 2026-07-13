@@ -8,52 +8,90 @@
     <meta name="description"
         content="Review notes connecting bit-packed GF(2) linear algebra, M4RI-style table methods, and CTMC Fenwick-tree correctness." />
     <meta name="author" content="Hanchen Liu" />
+    <link rel="canonical" href="https://hcphy.github.io/blog/performance-engineering-gf2-ctmc.html" />
     <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
+    <meta property="og:title" content="Performance Engineering Lessons from GF(2) and CTMC — Hanchen Liu" />
+    <meta property="og:description" content="Bit-packed GF(2) linear algebra, M4RI-style methods, and CTMC correctness." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://hcphy.github.io/blog/performance-engineering-gf2-ctmc.html" />
+    <meta property="og:site_name" content="Hanchen Liu" />
+    <meta property="og:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <meta property="article:published_time" content="2026-06-01" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Performance Engineering Lessons from GF(2) and CTMC" />
+    <meta name="twitter:description" content="A practical engineering loop for bit-packed linear algebra and Monte Carlo." />
+    <meta name="twitter:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta name="twitter:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Performance Engineering Lessons From GF(2) Linear Algebra And CTMC",
+      "description": "Review notes connecting bit-packed GF(2) linear algebra, M4RI-style table methods, and CTMC Fenwick-tree correctness.",
+      "image": "https://hcphy.github.io/assets/img/og-card.png",
+      "datePublished": "2026-06-01",
+      "dateModified": "2026-07-13",
+      "author": {
+        "@type": "Person",
+        "name": "Hanchen Liu",
+        "url": "https://hcphy.github.io/"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hcphy.github.io/blog/performance-engineering-gf2-ctmc.html"
+      }
+    }
+    </script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
-        <nav class="container">
+        <nav class="container" aria-label="Primary navigation">
             <a class="brand" href="../index.html">Hanchen Liu</a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="../pages/research.html">Research</a>
                 <a href="../pages/projects.html">Projects</a>
-                <a href="../pages/blog.html" class="active">Blog</a>
+                <a href="../pages/blog.html" class="active" aria-current="location">Blog</a>
                 <a href="../pages/game.html">Game</a>
                 <a href="../index.html#contact">Contact</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
             </div>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+                <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <article class="section container">
-            <header style="margin-bottom: 2rem;">
+            <header class="article-header">
                 <a href="../pages/blog.html"
-                    style="font-size: var(--text-sm); margin-bottom: 1rem; display: inline-block;">&larr; Back to
+                    class="back-link">&larr; Back to
                     Blog</a>
                 <h1>Performance Engineering Lessons From GF(2) Linear Algebra And CTMC</h1>
-                <p class="meta">June 1, 2026 &bull; Interview Review</p>
+                <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
             </header>
 
             <div class="content">
@@ -75,8 +113,8 @@
                 </div>
 
                 <h2>M4RI Matrix Multiplication</h2>
-                <p>M4RI-style multiplication groups `b` columns of `A` and `b` rows of `B`. For each strip, build a
-                    table of all `2^b` XOR combinations of selected rows of `B`. Then each row of `A` supplies a small
+                <p>M4RI-style multiplication groups <code>b</code> columns of <code>A</code> and <code>b</code> rows of <code>B</code>. For each strip, build a
+                    table of all <code>2^b</code> XOR combinations of selected rows of <code>B</code>. Then each row of <code>A</code> supplies a small
                     index into that table.</p>
 
                 <pre><code>A in F_2^(I x K)
@@ -92,22 +130,22 @@ per b-wide strip:
 across K/b strips:
   O((K/b) * (2^b * J/W + I*b + I*J/W))</code></pre>
 
-                <p>The correction that matters: constructing a table index from `A` is scalar work per output row. It
-                    should not be multiplied by `J/W` unless the implementation repeats index construction for every
-                    output word. The table-row XOR is the part that scales with `J/W`.</p>
+                <p>The correction that matters: constructing a table index from <code>A</code> is scalar work per output row. It
+                    should not be multiplied by <code>J/W</code> unless the implementation repeats index construction for every
+                    output word. The table-row XOR is the part that scales with <code>J/W</code>.</p>
 
                 <h2>Rank And Nullspace</h2>
-                <p>Bit-packed Gaussian elimination is roughly `O(r*m*n/W)`, where each row XOR costs `n/W`. M4RI groups
+                <p>Bit-packed Gaussian elimination is roughly <code>O(r*m*n/W)</code>, where each row XOR costs <code>n/W</code>. M4RI groups
                     pivots and uses lookup tables to reduce the constant in the dense elimination term.</p>
 
                 <p>For nullspace, the ideal path is: row-reduce, identify pivot and free columns, then construct basis
-                    vectors. After an RREF-like form `[I_r | A]`, the nullspace basis is essentially `[A; I_f]` over
+                    vectors. After an RREF-like form <code>[I_r | A]</code>, the nullspace basis is essentially <code>[A; I_f]</code> over
                     GF(2). But an implementation that still does standard-style elimination below pivots may not get
                     the full M4RI reduction benefit. The honest complexity has to describe the actual code, not the
                     algorithm I wish I had implemented.</p>
 
                 <h2>Layout Experiments</h2>
-                <p>A full row-major copy of `A` sounded plausible because it could reduce strided gathers when building
+                <p>A full row-major copy of <code>A</code> sounded plausible because it could reduce strided gathers when building
                     M4RI indices. In measurements, the full transpose/copy was too expensive. The better abstraction was
                     narrower: precompute exactly the M4RI table index needed by the hot loop.</p>
 
@@ -141,9 +179,9 @@ aidx:
                 <p>A Fenwick tree is the right data structure for event selection when rates change locally:</p>
 
                 <ul>
-                    <li>point update: `O(log N)`</li>
-                    <li>prefix sum / total: `O(log N)`</li>
-                    <li>weighted prefix search: `O(log N)`</li>
+                    <li>point update: <code>O(log N)</code></li>
+                    <li>prefix sum / total: <code>O(log N)</code></li>
+                    <li>weighted prefix search: <code>O(log N)</code></li>
                 </ul>
 
                 <h2>Correctness Before Speed</h2>
@@ -160,7 +198,7 @@ aidx:
   recompute all rates from scratch
   assert local rates == full recomputation</code></pre>
 
-                <p>Only after this test passes should performance cleanup matter: `O(N)` Fenwick build, maintaining the
+                <p>Only after this test passes should performance cleanup matter: <code>O(N)</code> Fenwick build, maintaining the
                     total rate as a scalar, exposing runnable step counts, and making parallel worker counts
                     configurable.</p>
 
@@ -180,7 +218,7 @@ aidx:
         <div class="container">&copy; <span id="year"></span> Hanchen Liu</div>
     </footer>
 
-    <script src="../assets/js/script.js"></script>
+    <script defer src="../assets/js/script.js"></script>
 </body>
 
 </html>

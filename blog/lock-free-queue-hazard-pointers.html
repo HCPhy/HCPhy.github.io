@@ -8,52 +8,90 @@
     <meta name="description"
         content="A review article on Michael-Scott MPMC queues, CAS linearization points, memory ordering, ABA, and hazard-pointer reclamation." />
     <meta name="author" content="Hanchen Liu" />
+    <link rel="canonical" href="https://hcphy.github.io/blog/lock-free-queue-hazard-pointers.html" />
     <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
+    <meta property="og:title" content="Lock-Free MPMC Queues and Hazard Pointers — Hanchen Liu" />
+    <meta property="og:description" content="Michael-Scott queues, CAS linearization, memory ordering, ABA, and hazard-pointer reclamation." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://hcphy.github.io/blog/lock-free-queue-hazard-pointers.html" />
+    <meta property="og:site_name" content="Hanchen Liu" />
+    <meta property="og:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <meta property="article:published_time" content="2026-06-01" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lock-Free MPMC Queues and Hazard Pointers" />
+    <meta name="twitter:description" content="Queue linearization, memory ordering, ABA, and safe reclamation." />
+    <meta name="twitter:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta name="twitter:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Lock-Free MPMC Queues And Hazard Pointers",
+      "description": "A review article on Michael-Scott MPMC queues, CAS linearization points, memory ordering, ABA, and hazard-pointer reclamation.",
+      "image": "https://hcphy.github.io/assets/img/og-card.png",
+      "datePublished": "2026-06-01",
+      "dateModified": "2026-07-13",
+      "author": {
+        "@type": "Person",
+        "name": "Hanchen Liu",
+        "url": "https://hcphy.github.io/"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://hcphy.github.io/blog/lock-free-queue-hazard-pointers.html"
+      }
+    }
+    </script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
-        <nav class="container">
+        <nav class="container" aria-label="Primary navigation">
             <a class="brand" href="../index.html">Hanchen Liu</a>
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="../pages/research.html">Research</a>
                 <a href="../pages/projects.html">Projects</a>
-                <a href="../pages/blog.html" class="active">Blog</a>
+                <a href="../pages/blog.html" class="active" aria-current="location">Blog</a>
                 <a href="../pages/game.html">Game</a>
                 <a href="../index.html#contact">Contact</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
             </div>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+                <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <article class="section container">
-            <header style="margin-bottom: 2rem;">
+            <header class="article-header">
                 <a href="../pages/blog.html"
-                    style="font-size: var(--text-sm); margin-bottom: 1rem; display: inline-block;">&larr; Back to
+                    class="back-link">&larr; Back to
                     Blog</a>
                 <h1>Lock-Free MPMC Queues And Hazard Pointers</h1>
-                <p class="meta">June 1, 2026 &bull; Interview Review</p>
+                <p class="meta"><time datetime="2026-06-01">June 1, 2026</time> &bull; Interview Review</p>
             </header>
 
             <div class="content">
@@ -63,8 +101,8 @@
 
                 <div class="review-box">
                     <p><strong>One-minute project answer.</strong> The core is a Michael-Scott MPMC queue. Enqueue
-                        linearizes when a producer links a new node through `tail-&gt;next`. Dequeue linearizes when a
-                        consumer advances `head` to the next node. The hard part in C++ is not only moving pointers
+                        linearizes when a producer links a new node through <code>tail-&gt;next</code>. Dequeue linearizes when a
+                        consumer advances <code>head</code> to the next node. The hard part in C++ is not only moving pointers
                         atomically; removed nodes cannot be deleted immediately because another thread may still hold a
                         raw pointer. Hazard pointers solve that by letting threads publish the nodes they may
                         dereference. Removed nodes are retired first and deleted only after a scan proves no hazard
@@ -79,8 +117,8 @@
   v
 [dummy/no value] -&gt; [value A] &lt;- tail_</code></pre>
 
-                <p>On dequeue, the value comes from `head-&gt;next`, not from the old dummy head. A successful dequeue
-                    advances `head_` and retires the old dummy node.</p>
+                <p>On dequeue, the value comes from <code>head-&gt;next</code>, not from the old dummy head. A successful dequeue
+                    advances <code>head_</code> and retires the old dummy node.</p>
 
                 <pre><code>out = std::move(*next-&gt;value);
 next-&gt;value.reset();
@@ -88,7 +126,7 @@ head_.compare_exchange_strong(h, next, ...);
 retire_or_delete(h);</code></pre>
 
                 <h2>Enqueue Linearization</h2>
-                <p>Enqueue repeatedly snapshots `tail_` and `tail-&gt;next`. If `tail-&gt;next` is null, the observed tail
+                <p>Enqueue repeatedly snapshots <code>tail_</code> and <code>tail-&gt;next</code>. If <code>tail-&gt;next</code> is null, the observed tail
                     appears to be the real last node. The producer tries to link its new node there:</p>
 
                 <pre><code>if (next == nullptr) {
@@ -98,14 +136,14 @@ retire_or_delete(h);</code></pre>
     }
 }</code></pre>
 
-                <p>The linearization point is the successful CAS on `t-&gt;next`. Advancing `tail_` afterward is helpful
+                <p>The linearization point is the successful CAS on <code>t-&gt;next</code>. Advancing <code>tail_</code> afterward is helpful
                     for performance but not what makes the new node reachable.</p>
 
-                <p>If `next != nullptr`, the observed tail is stale. The thread helps move `tail_` forward. This helping
+                <p>If <code>next != nullptr</code>, the observed tail is stale. The thread helps move <code>tail_</code> forward. This helping
                     behavior is the lock-free bargain: losing one CAS often means another thread made progress.</p>
 
                 <h2>Dequeue Linearization</h2>
-                <p>Dequeue snapshots `head_`, protects it, reads `head-&gt;next`, and tries to advance `head_`:</p>
+                <p>Dequeue snapshots <code>head_</code>, protects it, reads <code>head-&gt;next</code>, and tries to advance <code>head_</code>:</p>
 
                 <pre><code>if (next == nullptr) {
     return false;
@@ -118,13 +156,14 @@ if (head_.compare_exchange_strong(h, next, ...)) {
     return true;
 }</code></pre>
 
-                <p>The linearization point is the successful CAS on `head_`. After that point, this consumer owns the
+                <p>The linearization point is the successful CAS on <code>head_</code>. After that point, this consumer owns the
                     logical dequeue of that value.</p>
 
                 <h2>Atomics And Memory Ordering</h2>
                 <p>A mutex protects a region of code. An atomic protects operations on one object. In the queue, the
-                    shared state is `head_`, `tail_`, and each node's `next` pointer.</p>
+                    shared state is <code>head_</code>, <code>tail_</code>, and each node's <code>next</code> pointer.</p>
 
+                <div class="table-scroll" role="region" aria-label="C++ atomic memory-order reference" tabindex="0">
                 <table>
                     <thead>
                         <tr>
@@ -134,27 +173,28 @@ if (head_.compare_exchange_strong(h, next, ...)) {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>`relaxed`</td>
+                            <td><code>relaxed</code></td>
                             <td>Atomicity only, no ordering for surrounding memory.</td>
                         </tr>
                         <tr>
-                            <td>`release`</td>
+                            <td><code>release</code></td>
                             <td>Publish earlier writes.</td>
                         </tr>
                         <tr>
-                            <td>`acquire`</td>
+                            <td><code>acquire</code></td>
                             <td>Observe published state so later reads can rely on it.</td>
                         </tr>
                         <tr>
-                            <td>`acq_rel`</td>
+                            <td><code>acq_rel</code></td>
                             <td>Acquire plus release, common for read-modify-write operations.</td>
                         </tr>
                         <tr>
-                            <td>`seq_cst`</td>
+                            <td><code>seq_cst</code></td>
                             <td>Strongest global ordering, simpler but often more expensive.</td>
                         </tr>
                     </tbody>
                 </table>
+                </div>
 
                 <p>For a queue node, the producer initializes the payload, then publishes the node pointer. A consumer
                     that acquire-loads the pointer can safely read the initialized payload. Acquire/release is not a
@@ -184,13 +224,13 @@ if (t != tail_.load(std::memory_order_acquire)) {
     retry;
 }</code></pre>
 
-                <p>After validation, `t` may still become logically stale, but it cannot be deleted while the hazard
+                <p>After validation, <code>t</code> may still become logically stale, but it cannot be deleted while the hazard
                     slot contains it. That separates "safe to dereference" from "still the right algorithmic snapshot."
                 </p>
 
                 <h2>ABA And Reclamation</h2>
                 <p>CAS checks whether a pointer value still equals the expected value. It can be fooled if a memory
-                    address goes through an `A -&gt; B -&gt; A` cycle while representing a different object. Hazard pointers
+                    address goes through an <code>A -&gt; B -&gt; A</code> cycle while representing a different object. Hazard pointers
                     help with the memory-reuse form of ABA by preventing a protected node from being deleted and reused
                     while a thread might still dereference it.</p>
 
@@ -211,7 +251,7 @@ keep A and X</code></pre>
 
                 <div class="review-box">
                     <p><strong>Core intuition.</strong> Many threads repeatedly race to win one small CAS. The enqueue
-                        winner links `tail-&gt;next`; the dequeue winner advances `head_`. Losers retry or help advance
+                        winner links <code>tail-&gt;next</code>; the dequeue winner advances <code>head_</code>. Losers retry or help advance
                         stale pointers. If this thread loses, some other thread usually made progress.</p>
                 </div>
             </div>
@@ -222,7 +262,7 @@ keep A and X</code></pre>
         <div class="container">&copy; <span id="year"></span> Hanchen Liu</div>
     </footer>
 
-    <script src="../assets/js/script.js"></script>
+    <script defer src="../assets/js/script.js"></script>
 </body>
 
 </html>
