@@ -12,6 +12,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
     <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/blog-refresh.css" />
     <meta property="og:title" content="LC 300 — Longest Increasing Subsequence (LIS) — Hanchen Liu" />
     <meta property="og:description" content="Understanding LIS as Greedy + Dominance Pruning + Binary Search, from a Pareto frontier to patience sorting." />
     <meta property="og:type" content="article" />
@@ -41,7 +42,6 @@
     }
     </script>
     <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
-    <style>.content .math-scroll { max-width: 100%; overflow-x: auto; }</style>
 </head>
 
 <body>
@@ -79,17 +79,26 @@
     </header>
 
     <main id="main-content" tabindex="-1">
-        <article class="section container">
+        <article class="section container algorithm-article">
             <header class="article-header">
                 <a href="../pages/blog.html" class="back-link">&larr; Back to Blog</a>
-                <h1>LC 300 — Longest Increasing Subsequence (LIS)</h1>
-                <p class="meta"><time datetime="2026-10-17">October 17, 2026</time> &bull; Algorithm Notes</p>
+                <p class="article-kicker">Algorithm notes / LeetCode 300</p>
+                <h1>Longest Increasing Subsequence (LIS)</h1>
+                <p class="article-subtitle">从 Pareto Frontier 到 Patience Sorting：为什么 Greedy 和 Dominance Pruning 能把 LIS 的状态空间压缩到只需一次 Binary Search？</p>
+                <p class="meta"><time datetime="2026-10-17">October 17, 2026</time> &nbsp;&middot;&nbsp; Algorithm Notes &nbsp;&middot;&nbsp; C++</p>
+                <div class="article-hero-tags" aria-label="Key ideas">
+                    <span>Greedy</span><span>Dominance Pruning</span><span>Binary Search</span>
+                </div>
             </header>
 
-            <div class="content">
-                <p><strong>核心思想：Greedy + Dominance Pruning + Binary Search</strong></p>
+            <div class="article-main-grid">
+                <div class="content article-body">
+                <div class="lead-note">
+                    <span class="lead-note-label">The idea in one line</span>
+                    <p><strong>核心思想：Greedy + Dominance Pruning + Binary Search</strong></p>
+                </div>
 
-                <h2>1. State Representation</h2>
+                <h2 id="state-representation">1. State Representation</h2>
                 <p>维护所有非劣状态（Pareto Frontier）：</p>
                 <div class="math-scroll">\[
                     S = \{(a,\ell_a)\}
@@ -104,7 +113,7 @@
                 \]</div>
                 <p>如果没有合法前驱，最大值视为 <code>0</code>，单个元素构成长度为 <code>1</code> 的 subsequence。</p>
 
-                <h2>2. Greedy — Dominance Pruning</h2>
+                <h2 id="dominance-pruning">2. Greedy — Dominance Pruning</h2>
                 <p>如果两个状态满足：</p>
                 <div class="math-scroll">\[
                     \boxed{a\le b,\quad \ell_a\ge\ell_b}
@@ -122,7 +131,7 @@
                 \]</div>
                 <p>且这些长度恰好为 \(1,2,\ldots,L\)。所以 <code>prev(lower_bound(b))</code> 就是最优前驱；如果没有比 <code>b</code> 更小的 tail，就从长度 <code>1</code> 开始。</p>
 
-                <h2>3. 从 TreeMap 到 Patience Sorting</h2>
+                <h2 id="patience-sorting">3. 从 TreeMap 到 Patience Sorting</h2>
                 <p>定义：</p>
                 <div class="math-scroll">\[
                     \boxed{\mathrm{tails}[k]=\text{长度为 }k+1\text{ 的递增子序列的最小结尾}}
@@ -134,29 +143,58 @@
                     <li>否则，新增一个 tail（LIS 长度增加）。</li>
                 </ol>
                 <p>由于 <code>tails</code> 严格递增，可以直接 Binary Search。</p>
-                <pre><code class="language-cpp">class Solution {
-public:
-    int lengthOfLIS(vector&lt;int&gt;&amp; nums) {
-        vector&lt;int&gt; tails;
+                <div class="code-card">
+                    <div class="code-toolbar">
+                        <div class="code-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                        <span class="code-caption">C++ &middot; lower_bound</span>
+                        <button class="code-copy" type="button" data-copy-target="lis-code">Copy code</button>
+                    </div>
+                    <pre><code id="lis-code" class="language-cpp"><span class="syntax-keyword">class</span> Solution {
+<span class="syntax-keyword">public</span>:
+    <span class="syntax-type">int</span> <span class="syntax-function">lengthOfLIS</span>(<span class="syntax-type">vector</span>&lt;<span class="syntax-type">int</span>&gt;&amp; nums) {
+        <span class="syntax-type">vector</span>&lt;<span class="syntax-type">int</span>&gt; tails;
 
-        for (int x : nums) {
-            auto it = lower_bound(tails.begin(), tails.end(), x);
-            if (it == tails.end()) tails.push_back(x);
-            else *it = x;
+        <span class="syntax-keyword">for</span> (<span class="syntax-type">int</span> x : nums) {
+            <span class="syntax-keyword">auto</span> it = <span class="syntax-function">lower_bound</span>(tails.begin(), tails.end(), x);
+            <span class="syntax-keyword">if</span> (it == tails.end()) tails.push_back(x);
+            <span class="syntax-keyword">else</span> *it = x;
         }
 
-        return tails.size();
+        <span class="syntax-keyword">return</span> tails.size();
     }
 };</code></pre>
+                </div>
 
-                <p><strong>Complexity</strong></p>
-                <ul>
-                    <li>Time: \(O(n\log n)\)</li>
-                    <li>Space: \(O(n)\)</li>
-                </ul>
+                <figure class="trace-figure">
+                    <figcaption>Tails evolution <span>Example: [10, 9, 2, 5, 3, 7, 101, 18]</span></figcaption>
+                    <div class="trace-rows">
+                        <div class="trace-row">
+                            <span class="trace-row-label">x = 5</span>
+                            <div class="trace-tails"><span>2</span><span>5</span></div>
+                        </div>
+                        <div class="trace-row">
+                            <span class="trace-row-label">x = 3</span>
+                            <div class="trace-tails"><span>2</span><span>3</span></div>
+                        </div>
+                        <div class="trace-row">
+                            <span class="trace-row-label">x = 7</span>
+                            <div class="trace-tails"><span>2</span><span>3</span><span>7</span></div>
+                        </div>
+                        <div class="trace-row">
+                            <span class="trace-row-label">x = 18</span>
+                            <div class="trace-tails"><span>2</span><span>3</span><span>7</span><span>18</span></div>
+                        </div>
+                    </div>
+                    <p class="trace-caption">每一步只保留各个长度下的最小结尾；最终 <strong>tails.size() = 4</strong>。</p>
+                </figure>
+
+                <div class="complexity-stats" aria-label="Algorithm complexity">
+                    <div><span class="complexity-label">Time complexity</span><strong>\(O(n\log n)\)</strong></div>
+                    <div><span class="complexity-label">Space complexity</span><strong>\(O(n)\)</strong></div>
+                </div>
                 <p><strong>注意：</strong><code>tails</code> 整个数组不一定对应某一条实际存在的 subsequence；但每个 <code>tails[k]</code> 都是某条长度为 <code>k+1</code> 的递增子序列的真实结尾。</p>
 
-                <h2>4. Greedy vs DP</h2>
+                <h2 id="greedy-vs-dp">4. Greedy vs DP</h2>
                 <p>传统 DAG DP：</p>
                 <div class="math-scroll">\[
                     dp[i] = 1 + \max_{\substack{j\lt i \\ \mathrm{nums}[j]\lt\mathrm{nums}[i]}} dp[j]
@@ -173,7 +211,7 @@ public:
                     </table>
                 </div>
 
-                <h2>5. Generalizable Insight</h2>
+                <h2 id="generalizable-insight">5. Generalizable Insight</h2>
                 <p>与 Monotonic Deque 类似，LIS 也是维护一个 <strong>Pareto Frontier</strong>：</p>
                 <div class="math-scroll">\[
                     \boxed{
@@ -186,6 +224,20 @@ public:
                     <p>Can one state dominate another for <strong>all possible future decisions</strong>?</p>
                 </blockquote>
                 <p>如果能证明 dominance relation，就可能通过 Greedy Pruning 大幅压缩状态空间。</p>
+                </div>
+                <aside class="article-toc">
+                    <p class="toc-kicker">On this page</p>
+                    <nav aria-label="Article sections">
+                        <ol>
+                            <li><a href="#state-representation">01 &nbsp; State Representation</a></li>
+                            <li><a href="#dominance-pruning">02 &nbsp; Dominance Pruning</a></li>
+                            <li><a href="#patience-sorting">03 &nbsp; Patience Sorting</a></li>
+                            <li><a href="#greedy-vs-dp">04 &nbsp; Greedy vs DP</a></li>
+                            <li><a href="#generalizable-insight">05 &nbsp; Generalizable Insight</a></li>
+                        </ol>
+                    </nav>
+                    <p class="toc-note">The important question: which states can never improve any future decision?</p>
+                </aside>
             </div>
         </article>
     </main>
@@ -208,6 +260,29 @@ public:
     </footer>
 
     <script defer src="../assets/js/script.js"></script>
+    <script>
+        document.querySelectorAll('[data-copy-target]').forEach(button => {
+            button.addEventListener('click', async () => {
+                const target = document.getElementById(button.dataset.copyTarget);
+                if (!target) return;
+                const original = 'Copy code';
+                try {
+                    await navigator.clipboard.writeText(target.textContent.trim());
+                    button.textContent = 'Copied!';
+                } catch (_) {
+                    button.textContent = 'Select code';
+                    const selection = window.getSelection();
+                    if (selection) {
+                        const range = document.createRange();
+                        range.selectNodeContents(target);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+                }
+                window.setTimeout(() => { button.textContent = original; }, 1800);
+            });
+        });
+    </script>
 </body>
 
 </html>
