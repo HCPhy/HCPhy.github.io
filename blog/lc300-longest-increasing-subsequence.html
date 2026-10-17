@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LC 300 — Longest Increasing Subsequence (LIS) &mdash; Hanchen Liu</title>
+    <meta name="description" content="LeetCode 300 LIS notes: Greedy, Pareto dominance pruning, patience sorting, and binary search, with a C++ implementation." />
+    <meta name="author" content="Hanchen Liu" />
+    <link rel="canonical" href="https://hcphy.github.io/blog/lc300-longest-increasing-subsequence.html" />
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <script src="../assets/js/theme-init.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <meta property="og:title" content="LC 300 — Longest Increasing Subsequence (LIS) — Hanchen Liu" />
+    <meta property="og:description" content="Understanding LIS as Greedy + Dominance Pruning + Binary Search, from a Pareto frontier to patience sorting." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://hcphy.github.io/blog/lc300-longest-increasing-subsequence.html" />
+    <meta property="og:site_name" content="Hanchen Liu" />
+    <meta property="og:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <meta property="article:published_time" content="2026-10-17" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LC 300 — Longest Increasing Subsequence (LIS)" />
+    <meta name="twitter:description" content="Greedy, dominance pruning, Pareto frontier, and patience sorting for LIS." />
+    <meta name="twitter:image" content="https://hcphy.github.io/assets/img/og-card.png" />
+    <meta name="twitter:image:alt" content="Hanchen Liu — quantum information, statistical physics, and scientific computing" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "LC 300 — Longest Increasing Subsequence (LIS)",
+      "description": "A Pareto-frontier view of LIS via greedy dominance pruning and binary search.",
+      "image": "https://hcphy.github.io/assets/img/og-card.png",
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "author": {"@type": "Person", "name": "Hanchen Liu", "url": "https://hcphy.github.io/"},
+      "mainEntityOfPage": {"@type": "WebPage", "@id": "https://hcphy.github.io/blog/lc300-longest-increasing-subsequence.html"}
+    }
+    </script>
+    <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    <style>.content .math-scroll { max-width: 100%; overflow-x: auto; }</style>
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="site-header">
+        <nav class="container" aria-label="Primary navigation">
+            <a class="brand" href="../index.html">Hanchen Liu</a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="../pages/research.html">Research</a>
+                <a href="../pages/projects.html">Projects</a>
+                <a href="../pages/blog.html" class="active" aria-current="location">Blog</a>
+                <a href="../pages/game.html">Game</a>
+                <a href="../index.html#contact">Contact</a>
+            </div>
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+                <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="5.64" y2="18.36"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                </svg>
+                <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+        <article class="section container">
+            <header class="article-header">
+                <a href="../pages/blog.html" class="back-link">&larr; Back to Blog</a>
+                <h1>LC 300 — Longest Increasing Subsequence (LIS)</h1>
+                <p class="meta"><time datetime="2026-10-17">October 17, 2026</time> &bull; Algorithm Notes</p>
+            </header>
+
+            <div class="content">
+                <p><strong>核心思想：Greedy + Dominance Pruning + Binary Search</strong></p>
+
+                <h2>1. State Representation</h2>
+                <p>维护所有非劣状态（Pareto Frontier）：</p>
+                <div class="math-scroll">\[
+                    S = \{(a,\ell_a)\}
+                \]</div>
+                <ul>
+                    <li><code>a</code>：递增子序列的结尾值（tail）。</li>
+                    <li><code>ℓ_a</code>：该子序列的长度。</li>
+                </ul>
+                <p>对于新元素 <code>b</code>，希望接到结尾小于 <code>b</code> 的最长 subsequence 后面：</p>
+                <div class="math-scroll">\[
+                    \boxed{\ell_b = 1 + \max_{a\lt b}\ell_a}
+                \]</div>
+                <p>如果没有合法前驱，最大值视为 <code>0</code>，单个元素构成长度为 <code>1</code> 的 subsequence。</p>
+
+                <h2>2. Greedy — Dominance Pruning</h2>
+                <p>如果两个状态满足：</p>
+                <div class="math-scroll">\[
+                    \boxed{a\le b,\quad \ell_a\ge\ell_b}
+                \]</div>
+                <p>那么 <code>(a, ℓ_a)</code> dominates <code>(b, ℓ_b)</code>。因为前者：</p>
+                <ul>
+                    <li>长度不短于后者。</li>
+                    <li>结尾不大于后者，更容易被未来元素扩展。</li>
+                </ul>
+                <p>因此可以安全删除 <code>(b, ℓ_b)</code>。</p>
+                <p><strong>维护 Pareto Frontier 后：</strong></p>
+                <div class="math-scroll">\[
+                    a_1\lt a_2\lt\cdots\lt a_L,\qquad
+                    \ell_1\lt\ell_2\lt\cdots\lt\ell_L
+                \]</div>
+                <p>且这些长度恰好为 \(1,2,\ldots,L\)。所以 <code>prev(lower_bound(b))</code> 就是最优前驱；如果没有比 <code>b</code> 更小的 tail，就从长度 <code>1</code> 开始。</p>
+
+                <h2>3. 从 TreeMap 到 Patience Sorting</h2>
+                <p>定义：</p>
+                <div class="math-scroll">\[
+                    \boxed{\mathrm{tails}[k]=\text{长度为 }k+1\text{ 的递增子序列的最小结尾}}
+                \]</div>
+                <p>对于每个新元素 <code>x</code>：</p>
+                <ol>
+                    <li><code>lower_bound(x)</code>：找到第一个 <code>tail &gt;= x</code>。</li>
+                    <li>如果存在，用 <code>x</code> 替换它（更新这一长度的最优结尾）。</li>
+                    <li>否则，新增一个 tail（LIS 长度增加）。</li>
+                </ol>
+                <p>由于 <code>tails</code> 严格递增，可以直接 Binary Search。</p>
+                <pre><code class="language-cpp">class Solution {
+public:
+    int lengthOfLIS(vector&lt;int&gt;&amp; nums) {
+        vector&lt;int&gt; tails;
+
+        for (int x : nums) {
+            auto it = lower_bound(tails.begin(), tails.end(), x);
+            if (it == tails.end()) tails.push_back(x);
+            else *it = x;
+        }
+
+        return tails.size();
+    }
+};</code></pre>
+
+                <p><strong>Complexity</strong></p>
+                <ul>
+                    <li>Time: \(O(n\log n)\)</li>
+                    <li>Space: \(O(n)\)</li>
+                </ul>
+                <p><strong>注意：</strong><code>tails</code> 整个数组不一定对应某一条实际存在的 subsequence；但每个 <code>tails[k]</code> 都是某条长度为 <code>k+1</code> 的递增子序列的真实结尾。</p>
+
+                <h2>4. Greedy vs DP</h2>
+                <p>传统 DAG DP：</p>
+                <div class="math-scroll">\[
+                    dp[i] = 1 + \max_{\substack{j\lt i \\ \mathrm{nums}[j]\lt\mathrm{nums}[i]}} dp[j]
+                \]</div>
+                <p>复杂度为 \(O(n^2)\)；无合法前驱时，最大值同样视为 <code>0</code>。</p>
+                <p>Patience Sorting 则通过 dominance pruning，避免枚举所有合法前驱。</p>
+                <div class="table-scroll" tabindex="0" role="region" aria-label="DP versus dominance pruning">
+                    <table>
+                        <thead><tr><th scope="col">方法</th><th scope="col">核心优化</th></tr></thead>
+                        <tbody>
+                            <tr><td>DFS + Memo</td><td>避免重复计算相同状态</td></tr>
+                            <tr><td>Greedy + Dominance</td><td>直接删除永远不可能更优的状态</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>5. Generalizable Insight</h2>
+                <p>与 Monotonic Deque 类似，LIS 也是维护一个 <strong>Pareto Frontier</strong>：</p>
+                <div class="math-scroll">\[
+                    \boxed{
+                    \text{Candidates}\rightarrow\text{Dominance Pruning}
+                    \rightarrow\text{Monotonic Frontier}\rightarrow\text{Binary Search}
+                    }
+                \]</div>
+                <p><strong>Key takeaway：</strong>遇到优化问题时，不仅考虑如何 memoize，还要考虑：</p>
+                <blockquote>
+                    <p>Can one state dominate another for <strong>all possible future decisions</strong>?</p>
+                </blockquote>
+                <p>如果能证明 dominance relation，就可能通过 Greedy Pruning 大幅压缩状态空间。</p>
+            </div>
+        </article>
+    </main>
+
+    <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span>&copy; <span id="year"></span> Hanchen Liu</span>
+            <a class="visitor-counter" href="https://github.com/HCPhy/HCPhy.github.io/graphs/traffic" target="_blank"
+                rel="noopener" aria-label="Open GitHub traffic insights">
+                <img src="https://visitor-badge.one9x.com/badge?page_id=HCPhy.github.io&amp;unique=true&amp;timeframe=86400&amp;left_text=unique%20visits&amp;left_color=gray&amp;right_color=teal"
+                    alt="visitor counter" width="150" height="20" loading="lazy" referrerpolicy="no-referrer" />
+            </a>
+        </div>
+    </footer>
+
+    <script defer src="../assets/js/script.js"></script>
+</body>
+
+</html>
