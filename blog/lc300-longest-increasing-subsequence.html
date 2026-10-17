@@ -131,7 +131,74 @@
                 \]</div>
                 <p>且这些长度恰好为 \(1,2,\ldots,L\)。所以 <code>prev(lower_bound(b))</code> 就是最优前驱；如果没有比 <code>b</code> 更小的 tail，就从长度 <code>1</code> 开始。</p>
 
-                <h2 id="patience-sorting">3. 从 TreeMap 到 Patience Sorting</h2>
+                <h2 id="set-derivation">3. My Derivation — <code>std::set</code> + Pareto Frontier</h2>
+                <p>这是我最初从 <strong>Greedy + Dominance Pruning</strong> 推导出来的版本：不用预先知道
+                    <code>tails</code> 的结构，直接把状态 <code>(tail, length)</code> 放进有序集合，
+                    让 <code>std::set</code> 维护所有非劣状态。</p>
+
+                <div class="code-card">
+                    <div class="code-toolbar">
+                        <div class="code-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                        <span class="code-caption">C++ &middot; my original ordered-set derivation</span>
+                        <button class="code-copy" type="button" data-copy-target="lis-set-code">Copy code</button>
+                    </div>
+                    <pre><code id="lis-set-code" class="language-cpp"><span class="syntax-keyword">class</span> Solution {
+<span class="syntax-keyword">public</span>:
+    <span class="syntax-type">int</span> <span class="syntax-function">lengthOfLIS</span>(<span class="syntax-type">vector</span>&lt;<span class="syntax-type">int</span>&gt;&amp; nums) {
+        /*
+        10 9 5 3 7 101 18 1 2
+        10-&gt;1
+        9-&gt;1
+        */
+
+        <span class="syntax-type">set</span>&lt;<span class="syntax-type">pair</span>&lt;<span class="syntax-type">int</span>, <span class="syntax-type">int</span>&gt;&gt; st; // end_pt, len
+        <span class="syntax-keyword">for</span>(<span class="syntax-type">int</span> x: nums){
+            <span class="syntax-keyword">auto</span> it = st.<span class="syntax-function">lower_bound</span>(<span class="syntax-type">pair</span>&lt;<span class="syntax-type">int</span>, <span class="syntax-type">int</span>&gt;{x, 1});
+            <span class="syntax-keyword">if</span>(it == st.begin()){
+                <span class="syntax-keyword">if</span>(it != st.end()) st.erase(it);
+                st.insert({x, 1});
+            }<span class="syntax-keyword">else</span>{
+                <span class="syntax-type">int</span> len = prev(it)-&gt;second + 1;
+                <span class="syntax-keyword">if</span>(it != st.end()) st.erase(it);
+                st.insert({x, len});
+            }
+        }
+
+        <span class="syntax-type">int</span> ret{};
+        <span class="syntax-keyword">for</span>(<span class="syntax-keyword">auto</span> [_, l]: st){
+            ret = max(ret, l);
+        }
+        <span class="syntax-keyword">return</span> ret;
+    }
+};</code></pre>
+                </div>
+
+                <p><strong>这里的 Greedy 更新规则：</strong></p>
+                <ol>
+                    <li><code>st.lower_bound({x, 1})</code> 找到 <strong>第一个 tail &ge; x</strong> 的状态；
+                        因为 <code>std::pair</code> 按字典序比较，且合法长度都至少为 <code>1</code>，所以可以这样查询。</li>
+                    <li>如果它就是 <code>begin()</code>，说明没有合法前驱，插入 <code>(x, 1)</code>。</li>
+                    <li>否则，用 <code>prev(it)-&gt;second + 1</code> 得到最优长度，并插入新状态 <code>(x, len)</code>。</li>
+                    <li>如果 <code>it != end()</code>，只需要删掉 <code>it</code>：
+                        它恰好对应新状态的同一个长度，但 tail 不小于 <code>x</code>，因此被新状态 dominate。</li>
+                </ol>
+                <p>为什么<strong>只删一个</strong>就够？Frontier 上按 tail 排序时，长度正好是连续的
+                    <code>1, 2, ..., L</code>。最优前驱的长度是 <code>k</code>，新状态的长度是 <code>k+1</code>；
+                    它替换的正是原先长度为 <code>k+1</code> 的最小 tail。后续状态长度更长，不会被它 dominate。</p>
+                <p>例如处理 <code>[10, 9, 5, 3, 7, 101, 18, 1, 2]</code>：
+                    在读到 <code>18</code> 时，Frontier 是 <code>(3,1), (7,2), (18,3)</code>；
+                    之后 <code>1</code> 替换 <code>(3,1)</code>，<code>2</code> 替换 <code>(7,2)</code>，
+                    最终最大长度仍为 <code>3</code>。</p>
+
+                <div class="lead-note">
+                    <span class="lead-note-label">Why this derivation is useful</span>
+                    <p>这个 <code>set</code> 版本也是 <strong>\(O(n\log n)\) time，\(O(n)\) space</strong>。
+                    它从“状态支配关系”直接推出算法：一旦发现非劣状态的长度必然连续，
+                    就不需要显式维护 <code>(tail, len)</code>，而只需一个按长度索引的连续数组
+                    <code>tails</code>。这就是下面 Patience Sorting 的由来。</p>
+                </div>
+
+                <h2 id="patience-sorting">4. 从 TreeMap 到 Patience Sorting</h2>
                 <p>定义：</p>
                 <div class="math-scroll">\[
                     \boxed{\mathrm{tails}[k]=\text{长度为 }k+1\text{ 的递增子序列的最小结尾}}
@@ -194,7 +261,7 @@
                 </div>
                 <p><strong>注意：</strong><code>tails</code> 整个数组不一定对应某一条实际存在的 subsequence；但每个 <code>tails[k]</code> 都是某条长度为 <code>k+1</code> 的递增子序列的真实结尾。</p>
 
-                <h2 id="greedy-vs-dp">4. Greedy vs DP</h2>
+                <h2 id="greedy-vs-dp">5. Greedy vs DP</h2>
                 <p>传统 DAG DP：</p>
                 <div class="math-scroll">\[
                     dp[i] = 1 + \max_{\substack{j\lt i \\ \mathrm{nums}[j]\lt\mathrm{nums}[i]}} dp[j]
@@ -211,7 +278,7 @@
                     </table>
                 </div>
 
-                <h2 id="generalizable-insight">5. Generalizable Insight</h2>
+                <h2 id="generalizable-insight">6. Generalizable Insight</h2>
                 <p>与 Monotonic Deque 类似，LIS 也是维护一个 <strong>Pareto Frontier</strong>：</p>
                 <div class="math-scroll">\[
                     \boxed{
@@ -231,9 +298,10 @@
                         <ol>
                             <li><a href="#state-representation">01 &nbsp; State Representation</a></li>
                             <li><a href="#dominance-pruning">02 &nbsp; Dominance Pruning</a></li>
-                            <li><a href="#patience-sorting">03 &nbsp; Patience Sorting</a></li>
-                            <li><a href="#greedy-vs-dp">04 &nbsp; Greedy vs DP</a></li>
-                            <li><a href="#generalizable-insight">05 &nbsp; Generalizable Insight</a></li>
+                            <li><a href="#set-derivation">03 &nbsp; My Set Derivation</a></li>
+                            <li><a href="#patience-sorting">04 &nbsp; Patience Sorting</a></li>
+                            <li><a href="#greedy-vs-dp">05 &nbsp; Greedy vs DP</a></li>
+                            <li><a href="#generalizable-insight">06 &nbsp; Generalizable Insight</a></li>
                         </ol>
                     </nav>
                     <p class="toc-note">The important question: which states can never improve any future decision?</p>
