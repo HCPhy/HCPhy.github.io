@@ -17,12 +17,17 @@
   </url>
   <url>
     <loc>https://hcphy.github.io/pages/blog.html</loc>
-    <lastmod>2026-07-13</lastmod>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://hcphy.github.io/pages/game.html</loc>
     <lastmod>2026-07-13</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://hcphy.github.io/blog/lc300-longest-increasing-subsequence.html</loc>
+    <lastmod>2026-10-17</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
