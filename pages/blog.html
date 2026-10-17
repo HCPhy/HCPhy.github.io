@@ -17,6 +17,7 @@
     <!-- Stylesheet -->
     <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/blog-refresh.css" />
     <meta property="og:title" content="Hanchen Liu — Blog" />
     <meta property="og:description" content="Thoughts and technical writings by Hanchen Liu." />
     <meta property="og:type" content="website" />
@@ -70,19 +71,50 @@
     </header>
 
     <main id="main-content" tabindex="-1">
-        <section id="blog" class="section container">
-            <h1 class="page-title">Blog</h1>
-            <p class="page-intro">Technical notes on scientific computing, performance engineering, and the systems ideas behind research software.</p>
+        <section id="blog" class="section container blog-index">
+            <div class="blog-masthead">
+                <div>
+                    <p class="blog-kicker">A public notebook / Hanchen Liu</p>
+                    <h1>Ideas, tested <em>in code.</em></h1>
+                    <p class="blog-intro">Algorithms, scientific computing, and the engineering ideas behind fast and reliable research software. Notes worth keeping, explained from first principles.</p>
+                    <div class="blog-pills" aria-label="Topics">
+                        <span>Algorithms</span>
+                        <span>GPU / CUDA</span>
+                        <span>C++ Systems</span>
+                        <span>Research Computing</span>
+                    </div>
+                </div>
+                <div class="blog-motif" aria-hidden="true">
+                    <p class="motif-title">// a monotonic frontier</p>
+                    <div class="motif-bars"><span>2</span><span>3</span><span>7</span><span>18</span></div>
+                    <p class="motif-foot">state → prune → search</p>
+                </div>
+            </div>
+
+            <div class="feed-heading" id="latest-writing">
+                <div>
+                    <p class="feed-kicker">From the notebook</p>
+                    <h2>Latest writing</h2>
+                </div>
+                <p>Short, practical write-ups on the ideas that connect theory and implementation.</p>
+            </div>
 
             <div class="grid blog-grid">
-                <article class="card blog-card">
-                    <h2><a href="../blog/lc300-longest-increasing-subsequence.html">LC 300 — Longest Increasing Subsequence (LIS)</a></h2>
-                    <p class="meta"><time datetime="2026-10-17">October 17, 2026</time> &bull; Algorithm Notes</p>
-                    <p>Greedy, dominance pruning, and binary search: deriving patience sorting from the Pareto frontier of LIS states.</p>
-                    <a class="btn btn-sm btn-ghost" href="../blog/lc300-longest-increasing-subsequence.html"
-                        aria-label="Read LC 300 Longest Increasing Subsequence">Read article</a>
+                <article class="card blog-card blog-featured">
+                    <div class="feature-copy">
+                        <p class="feature-eyebrow"><span class="feature-new">New</span> Algorithms / LC 300</p>
+                        <h2><a href="../blog/lc300-longest-increasing-subsequence.html">Longest Increasing Subsequence, through a greedy lens.</a></h2>
+                        <p class="meta"><time datetime="2026-10-17">October 17, 2026</time> &bull; Algorithm Notes</p>
+                        <p class="feature-summary">Why patience sorting works: a simple journey from Pareto dominance and state pruning to an O(n log n) binary-search algorithm.</p>
+                        <a class="btn btn-sm btn-ghost" href="../blog/lc300-longest-increasing-subsequence.html"
+                            aria-label="Read LC 300 Longest Increasing Subsequence">Read the note</a>
+                    </div>
+                    <div class="feature-figure" aria-hidden="true">
+                        <p class="feature-figure-title">// smallest tails by length</p>
+                        <div class="feature-nodes"><span>2</span><span>3</span><span>7</span><span>18</span></div>
+                        <p class="feature-figure-footer">O(n log n) &middot; binary search</p>
+                    </div>
                 </article>
-
 
                 <article class="card blog-card">
                     <h2><a href="../blog/cuda-interview-fundamentals.html">CUDA Fundamentals For Systems Interviews</a></h2>
