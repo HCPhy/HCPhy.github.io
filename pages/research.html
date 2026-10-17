@@ -18,7 +18,7 @@
 
     <!-- Stylesheet -->
     <script src="../assets/js/theme-init.js"></script>
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=20261017-3" />
     <meta property="og:title" content="Hanchen Liu — Research" />
     <meta property="og:description"
         content="Research and publications by Hanchen Liu in quantum information and statistical physics." />
@@ -74,7 +74,11 @@
 
     <main id="main-content" tabindex="-1">
         <section id="research" class="section container">
-            <h1 class="page-title">Research</h1>
+            <header class="page-header">
+                <p class="eyebrow">Research &amp; publications</p>
+                <h1 class="page-title">Research</h1>
+                <p class="page-intro">Quantum information, statistical mechanics, and the numerical methods that connect them.</p>
+            </header>
 
             <div class="grid research-grid">
                 <!-- Paper: Diffusive Relaxation of Participation Entropy -->
@@ -100,7 +104,7 @@
                         correlations, producing hydrodynamic memory and finite-size crossover behavior.
                     </p>
                     <footer class="actions">
-                        <a class="btn btn-ghost" href="https://arxiv.org/abs/2606.11561" target="_blank" rel="noopener"
+                        <a class="btn btn-sm btn-ghost" href="https://arxiv.org/abs/2606.11561" target="_blank" rel="noopener"
                             aria-label="Read arXiv 2606.11561">arXiv</a>
                     </footer>
                 </article>
@@ -129,7 +133,7 @@
                         circuit architectures to diagnose measurement-induced critical behavior.
                     </p>
                     <footer class="actions">
-                        <a class="btn btn-ghost" href="https://arxiv.org/abs/2603.12626" target="_blank" rel="noopener"
+                        <a class="btn btn-sm btn-ghost" href="https://arxiv.org/abs/2603.12626" target="_blank" rel="noopener"
                             aria-label="Read arXiv 2603.12626">arXiv</a>
                     </footer>
                 </article>
@@ -157,7 +161,7 @@
                         local multi-spin interactions and finite-temperature phase structure explicit.
                     </p>
                     <footer class="actions">
-                        <a class="btn btn-ghost" href="https://arxiv.org/abs/2510.07247" target="_blank" rel="noopener"
+                        <a class="btn btn-sm btn-ghost" href="https://arxiv.org/abs/2510.07247" target="_blank" rel="noopener"
                             aria-label="Read arXiv 2510.07247">arXiv</a>
                     </footer>
                 </article>
@@ -185,7 +189,7 @@
                         transition where logical information stops being efficiently recoverable.
                     </p>
                     <footer class="actions">
-                        <a class="btn btn-ghost" href="https://arxiv.org/abs/2506.00650" target="_blank" rel="noopener"
+                        <a class="btn btn-sm btn-ghost" href="https://arxiv.org/abs/2506.00650" target="_blank" rel="noopener"
                             aria-label="Read arXiv 2506.00650">arXiv</a>
                     </footer>
                 </article>
@@ -214,9 +218,9 @@
                     </p>
 
                     <footer class="actions">
-                        <a class="btn btn-ghost" href="https://arxiv.org/abs/2405.08286" target="_blank"
+                        <a class="btn btn-sm btn-ghost" href="https://arxiv.org/abs/2405.08286" target="_blank"
                             rel="noopener" aria-label="Read arXiv 2405.08286">arXiv</a>
-                        <a class="btn btn-ghost" href="https://doi.org/10.1088/1751-8121/ad82bc" target="_blank"
+                        <a class="btn btn-sm btn-ghost" href="https://doi.org/10.1088/1751-8121/ad82bc" target="_blank"
                             rel="noopener" aria-label="Open DOI 10.1088/1751-8121/ad82bc">DOI</a>
                     </footer>
                 </article>
@@ -245,9 +249,9 @@
                     </p>
 
                     <footer class="actions">
-                        <a class="btn btn-ghost" href="https://arxiv.org/abs/2310.01699" target="_blank"
+                        <a class="btn btn-sm btn-ghost" href="https://arxiv.org/abs/2310.01699" target="_blank"
                             rel="noopener" aria-label="Read arXiv 2310.01699">arXiv</a>
-                        <a class="btn btn-ghost" href="https://doi.org/10.1103/PhysRevB.111.024312" target="_blank"
+                        <a class="btn btn-sm btn-ghost" href="https://doi.org/10.1103/PhysRevB.111.024312" target="_blank"
                             rel="noopener" aria-label="Open DOI 10.1103/PhysRevB.111.024312">DOI</a>
                     </footer>
                 </article>
@@ -371,11 +375,14 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span>© <span id="year"></span> Hanchen Liu</span>
-            <a class="visitor-counter" href="https://github.com/HCPhy/HCPhy.github.io/graphs/traffic" target="_blank"
-                rel="noopener" aria-label="Open GitHub traffic insights">
-                <img src="https://visitor-badge.one9x.com/badge?page_id=HCPhy.github.io&amp;unique=true&amp;timeframe=86400&amp;left_text=unique%20visits&amp;left_color=gray&amp;right_color=teal"
-                    alt="visitor counter" width="150" height="20" loading="lazy" referrerpolicy="no-referrer" />
-            </a>
+            <div class="footer-links">
+                <a class="footer-link" href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub ↗</a>
+                <a class="visitor-counter" href="https://github.com/HCPhy/HCPhy.github.io/graphs/traffic" target="_blank"
+                    rel="noopener" aria-label="Open GitHub traffic insights">
+                    <img src="https://visitor-badge.one9x.com/badge?page_id=HCPhy.github.io&amp;unique=true&amp;timeframe=86400&amp;left_text=unique%20visits&amp;left_color=gray&amp;right_color=teal"
+                        alt="visitor counter" width="150" height="20" loading="lazy" referrerpolicy="no-referrer" />
+                </a>
+            </div>
         </div>
     </footer>
 

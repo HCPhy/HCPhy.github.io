@@ -27,6 +27,17 @@
     let pointerStart = null;
     let resizeFrame = 0;
     let resizeTimer = 0;
+    let themeColors = readThemeColors();
+
+    function readThemeColors() {
+        const styles = getComputedStyle(document.documentElement);
+        return {
+            deadColor: styles.getPropertyValue('--color-bg-alt').trim(),
+            aliveColor: styles.getPropertyValue('--color-primary').trim(),
+            ringColor: styles.getPropertyValue('--color-text').trim(),
+            markerColor: styles.getPropertyValue('--color-accent').trim()
+        };
+    }
 
     const bitMask = index => 1 << (index & 31);
     const wordOf = index => index >>> 5;
@@ -244,11 +255,7 @@
 
     function draw() {
         if (!initialized) return;
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const deadColor = isDark ? '#1e232d' : '#f0f4f8';
-        const aliveColor = isDark ? '#60a5fa' : '#2563eb';
-        const ringColor = isDark ? '#ffffff' : '#17202b';
-        const markerColor = '#f6b94a';
+        const { deadColor, aliveColor, ringColor, markerColor } = themeColors;
         const cellWidth = canvasWidth / cols;
         const cellHeight = canvasHeight / rows;
 
@@ -388,7 +395,10 @@
         }
     };
 
-    document.addEventListener('themechange', draw);
+    document.addEventListener('themechange', () => {
+        themeColors = readThemeColors();
+        draw();
+    });
 
     const resizeObserver = new ResizeObserver(() => {
         if (canvas.offsetParent === null) return;

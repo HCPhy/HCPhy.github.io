@@ -31,6 +31,16 @@ let cursorRow = 0;
 let activePointer = null;
 let paintValue = 1;
 let resizeFrame = 0;
+let gameColors = readGameColors();
+
+function readGameColors() {
+    const styles = getComputedStyle(document.documentElement);
+    return {
+        deadColor: styles.getPropertyValue('--color-bg-alt').trim(),
+        aliveColor: styles.getPropertyValue('--color-primary').trim(),
+        cursorColor: styles.getPropertyValue('--color-accent').trim()
+    };
+}
 
 function createGrid(width, height) {
     return new Array(width).fill(null).map(() => new Uint8Array(height));
@@ -93,10 +103,7 @@ function clearGrid() {
 }
 
 function draw() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const deadColor = isDark ? '#1e232d' : '#f0f4f8';
-    const aliveColor = isDark ? '#60a5fa' : '#2563eb';
-    const cursorColor = isDark ? '#f6b94a' : '#9a5b06';
+    const { deadColor, aliveColor, cursorColor } = gameColors;
     const cellWidth = canvasWidth / cols;
     const cellHeight = canvasHeight / rows;
 
@@ -297,7 +304,10 @@ speedRange.addEventListener('input', event => {
     event.target.setAttribute('aria-valuetext', `${fps} generations per second`);
 });
 
-document.addEventListener('themechange', draw);
+document.addEventListener('themechange', () => {
+    gameColors = readGameColors();
+    draw();
+});
 document.addEventListener('site:tabchange', event => {
     if (event.detail.tabId !== 'game-life' && isRunning) {
         pause();

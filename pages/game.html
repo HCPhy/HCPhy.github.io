@@ -15,7 +15,7 @@
 
     <!-- Stylesheet -->
     <script src="../assets/js/theme-init.js"></script>
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=20261017-3" />
     <meta property="og:title" content="Hanchen Liu — Interactive Models" />
     <meta property="og:description" content="Explore Conway's Game of Life and a random-coupling GF(2) model." />
     <meta property="og:type" content="website" />
@@ -70,8 +70,11 @@
 
     <main id="main-content" tabindex="-1">
         <section id="game" class="section container">
-            <h1 class="page-title">Interactive Models</h1>
-            <p class="page-intro">Explore how simple local rules create global structure. Both models support mouse, touch, and keyboard input.</p>
+            <header class="page-header">
+                <p class="eyebrow">Interactive experiments</p>
+                <h1 class="page-title">Interactive Models</h1>
+                <p class="page-intro">Explore how simple local rules create global structure. Both models support mouse, touch, and keyboard input.</p>
+            </header>
 
             <!-- Tabs -->
             <div class="tab-nav" role="tablist" aria-label="Interactive model">
@@ -152,17 +155,20 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <span>© <span id="year"></span> Hanchen Liu</span>
-            <a class="visitor-counter" href="https://github.com/HCPhy/HCPhy.github.io/graphs/traffic" target="_blank"
-                rel="noopener" aria-label="Open GitHub traffic insights">
-                <img src="https://visitor-badge.one9x.com/badge?page_id=HCPhy.github.io&amp;unique=true&amp;timeframe=86400&amp;left_text=unique%20visits&amp;left_color=gray&amp;right_color=teal"
-                    alt="visitor counter" width="150" height="20" loading="lazy" referrerpolicy="no-referrer" />
-            </a>
+            <div class="footer-links">
+                <a class="footer-link" href="https://github.com/HCPhy" target="_blank" rel="noopener">GitHub ↗</a>
+                <a class="visitor-counter" href="https://github.com/HCPhy/HCPhy.github.io/graphs/traffic" target="_blank"
+                    rel="noopener" aria-label="Open GitHub traffic insights">
+                    <img src="https://visitor-badge.one9x.com/badge?page_id=HCPhy.github.io&amp;unique=true&amp;timeframe=86400&amp;left_text=unique%20visits&amp;left_color=gray&amp;right_color=teal"
+                        alt="visitor counter" width="150" height="20" loading="lazy" referrerpolicy="no-referrer" />
+                </a>
+            </div>
         </div>
     </footer>
 
     <script defer src="../assets/js/script.js"></script>
-    <script defer src="../assets/js/game.js"></script>
-    <script defer src="../assets/js/random_coupling.js"></script>
+    <script defer src="../assets/js/game.js?v=20261017"></script>
+    <script defer src="../assets/js/random_coupling.js?v=20261017"></script>
 </body>
 
 </html>
