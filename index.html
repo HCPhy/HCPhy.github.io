@@ -18,7 +18,7 @@
 
   <!-- Stylesheet -->
   <script src="assets/js/theme-init.js"></script>
-  <link rel="stylesheet" href="assets/css/style.css?v=20261017-3" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20261018-2" />
   <meta property="og:title" content="Hanchen Liu — Quantum Information and Statistical Physics" />
   <meta property="og:description"
     content="Ph.D. candidate in Physics at Boston College working on quantum information, statistical physics, and numerical simulation." />
@@ -47,7 +47,6 @@
       <div class="nav-links">
         <a href="index.html" class="active" aria-current="page">Home</a>
         <a href="pages/research.html">Research</a>
-        <a href="pages/projects.html">Projects</a>
         <a href="pages/blog.html">Blog</a>
         <a href="pages/game.html">Game</a>
         <a href="index.html#contact">Contact</a>
@@ -84,7 +83,49 @@
       <div class="hero-actions" aria-label="Primary links">
         <a class="btn" href="pages/research.html">Research</a>
         <a class="btn btn-ghost" href="pages/research.html#publications">Publications</a>
-        <a class="btn btn-ghost" href="#contact">Contact</a>
+        <a class="btn btn-ghost" href="https://github.com/HCPhy" target="_blank" rel="noopener"
+          aria-label="View Hanchen Liu's projects on GitHub">GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <section id="highlights" class="section container latest-writing" aria-labelledby="highlights-title">
+      <header class="latest-writing-heading">
+        <h2 id="highlights-title">Highlights</h2>
+        <p>Recent writing &amp; research</p>
+      </header>
+      <!-- Static fallbacks remain readable offline; each index supplies its latest item. -->
+      <div class="highlights-grid">
+        <article class="latest-post" data-latest-post>
+          <p class="latest-post-kicker">Latest blog</p>
+          <div class="latest-post-meta">
+            <p class="latest-post-category">Algorithm Notes</p>
+            <time datetime="2026-10-17">October 17, 2026</time>
+          </div>
+          <div class="latest-post-copy">
+            <h3 class="latest-post-title"><a href="blog/lc300-longest-increasing-subsequence.html">Longest Increasing Subsequence, through a greedy lens.</a></h3>
+            <p class="latest-post-summary">Why patience sorting works: a simple journey from Pareto dominance and state pruning to an O(n log n) binary-search algorithm.</p>
+            <footer class="latest-post-actions">
+              <a class="latest-post-link" href="blog/lc300-longest-increasing-subsequence.html"
+                aria-label="Read Longest Increasing Subsequence, through a greedy lens">Read article <span aria-hidden="true">↗</span></a>
+              <a class="latest-post-archive" href="pages/blog.html">All posts <span aria-hidden="true">→</span></a>
+            </footer>
+          </div>
+        </article>
+        <article class="latest-post latest-post--research" data-latest-research>
+          <p class="latest-post-kicker">Latest research</p>
+          <div class="latest-post-meta">
+            <p class="latest-post-category">U(1)-Symmetric Dynamics • Hydrodynamics • Participation Entropy</p>
+          </div>
+          <div class="latest-post-copy">
+            <h3 class="latest-post-title"><a href="https://arxiv.org/abs/2606.11561" target="_blank" rel="noopener">Diffusive Relaxation of Participation Entropy</a></h3>
+            <p class="latest-post-summary">Shows how U(1) conservation laws slow participation-entropy relaxation through diffusive charge correlations, producing hydrodynamic memory and finite-size crossover behavior.</p>
+            <footer class="latest-post-actions">
+              <a class="latest-post-link" href="https://arxiv.org/abs/2606.11561" target="_blank" rel="noopener"
+                aria-label="Read Diffusive Relaxation of Participation Entropy">Read paper <span aria-hidden="true">↗</span></a>
+              <a class="latest-post-archive" href="pages/research.html">All research <span aria-hidden="true">→</span></a>
+            </footer>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -255,6 +296,7 @@
   </script>
 
   <script defer src="assets/js/script.js"></script>
+  <script defer src="assets/js/latest-post.js?v=20261018-2"></script>
 </body>
 
 </html>

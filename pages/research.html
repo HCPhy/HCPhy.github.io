@@ -19,6 +19,7 @@
     <!-- Stylesheet -->
     <script src="../assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="../assets/css/style.css?v=20261017-3" />
+    <link rel="stylesheet" href="../assets/css/collection.css?v=20261017-1" />
     <meta property="og:title" content="Hanchen Liu — Research" />
     <meta property="og:description"
         content="Research and publications by Hanchen Liu in quantum information and statistical physics." />
@@ -44,7 +45,6 @@
             <div class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="research.html" class="active" aria-current="page">Research</a>
-                <a href="projects.html">Projects</a>
                 <a href="blog.html">Blog</a>
                 <a href="game.html">Game</a>
                 <a href="../index.html#contact">Contact</a>
@@ -73,22 +73,33 @@
     </header>
 
     <main id="main-content" tabindex="-1">
-        <section id="research" class="section container">
+        <section id="research" class="section container collection-index">
             <header class="page-header">
                 <p class="eyebrow">Research &amp; publications</p>
                 <h1 class="page-title">Research</h1>
                 <p class="page-intro">Quantum information, statistical mechanics, and the numerical methods that connect them.</p>
             </header>
 
-            <div class="grid research-grid">
+            <div class="grid research-grid collection-grid">
                 <!-- Paper: Diffusive Relaxation of Participation Entropy -->
-                <article class="card research-card">
-                    <header class="research-head">
-                        <h2>Diffusive Relaxation of Participation Entropy</h2>
-                        <p class="meta">U(1)-Symmetric Dynamics • Hydrodynamics • Participation Entropy</p>
-                    </header>
+                <article class="card research-card collection-card collection-featured">
+                    <div class="collection-copy">
+                        <p class="feature-eyebrow">Latest research</p>
+                        <header class="research-head">
+                            <h2><a href="https://arxiv.org/abs/2606.11561" target="_blank" rel="noopener">Diffusive Relaxation of Participation Entropy</a></h2>
+                            <p class="meta collection-meta">U(1)-Symmetric Dynamics • Hydrodynamics • Participation Entropy</p>
+                        </header>
 
-                    <figure class="thumbs thumbs--uniform">
+                        <p class="blurb collection-summary">
+                            Shows how U(1) conservation laws slow participation-entropy relaxation through diffusive charge
+                            correlations, producing hydrodynamic memory and finite-size crossover behavior.
+                        </p>
+                        <footer class="actions">
+                            <a class="btn btn-sm btn-ghost" href="https://arxiv.org/abs/2606.11561" target="_blank" rel="noopener"
+                                aria-label="Read arXiv 2606.11561">arXiv</a>
+                        </footer>
+                    </div>
+                    <figure class="thumbs thumbs--uniform collection-figure">
                         <a href="../assets/img/research/u1_participation_entropy_relaxation_paper.webp" class="lb tile"
                             data-caption="Participation-entropy relaxation in the Haar-random U(1) brickwork circuit.">
                             <img src="../assets/img/research/u1_participation_entropy_relaxation_paper.webp"
@@ -98,22 +109,13 @@
                         <figcaption>Participation-entropy relaxation in the Haar-random U(1) brickwork circuit.
                         </figcaption>
                     </figure>
-
-                    <p class="blurb">
-                        Shows how U(1) conservation laws slow participation-entropy relaxation through diffusive charge
-                        correlations, producing hydrodynamic memory and finite-size crossover behavior.
-                    </p>
-                    <footer class="actions">
-                        <a class="btn btn-sm btn-ghost" href="https://arxiv.org/abs/2606.11561" target="_blank" rel="noopener"
-                            aria-label="Read arXiv 2606.11561">arXiv</a>
-                    </footer>
                 </article>
 
                 <!-- Paper: Magic and Participation Entropy -->
-                <article class="card research-card">
+                <article class="card research-card collection-card">
                     <header class="research-head">
-                        <h2>Magic &amp; Participation Entropy at Measurement-Induced Transitions</h2>
-                        <p class="meta">Random Clifford Circuits • Quantum Automata • Participation Entropy</p>
+                        <p class="meta collection-meta">Random Clifford Circuits • Quantum Automata • Participation Entropy</p>
+                        <h2><a href="https://arxiv.org/abs/2603.12626" target="_blank" rel="noopener">Magic &amp; Participation Entropy at Measurement-Induced Transitions</a></h2>
                     </header>
 
                     <figure class="thumbs thumbs--uniform">
@@ -128,7 +130,7 @@
                         </figcaption>
                     </figure>
 
-                    <p class="blurb">
+                    <p class="blurb collection-summary">
                         Studies participation entropy in random Clifford and quantum automaton circuits, using these
                         circuit architectures to diagnose measurement-induced critical behavior.
                     </p>
@@ -139,10 +141,10 @@
                 </article>
 
                 <!-- Paper: Quantum Circuits & Plaquette Models -->
-                <article class="card research-card">
+                <article class="card research-card collection-card">
                     <header class="research-head">
-                        <h2>Quantum Circuits with Ultraslow Dynamics</h2>
-                        <p class="meta">Hybrid Circuits • Glassy Dynamics • Classical Mapping</p>
+                        <p class="meta collection-meta">Hybrid Circuits • Glassy Dynamics • Classical Mapping</p>
+                        <h2><a href="https://arxiv.org/abs/2510.07247" target="_blank" rel="noopener">Quantum Circuits with Ultraslow Dynamics</a></h2>
                     </header>
 
                     <figure class="thumbs thumbs--uniform">
@@ -156,7 +158,7 @@
                         </figcaption>
                     </figure>
 
-                    <p class="blurb">
+                    <p class="blurb collection-summary">
                         Develops a classical plaquette-model formulation for hybrid quantum circuits, making the
                         local multi-spin interactions and finite-temperature phase structure explicit.
                     </p>
@@ -167,10 +169,10 @@
                 </article>
 
                 <!-- Paper: Coherent Error Induced Phase Transition -->
-                <article class="card research-card">
+                <article class="card research-card collection-card">
                     <header class="research-head">
-                        <h2>Coherent Error-Induced Phase Transition</h2>
-                        <p class="meta">Quantum Error Correction • Stabilizer Codes • Coherent Errors</p>
+                        <p class="meta collection-meta">Quantum Error Correction • Stabilizer Codes • Coherent Errors</p>
+                        <h2><a href="https://arxiv.org/abs/2506.00650" target="_blank" rel="noopener">Coherent Error-Induced Phase Transition</a></h2>
                     </header>
 
                     <figure class="thumbs thumbs--uniform">
@@ -184,7 +186,7 @@
                         </figcaption>
                     </figure>
 
-                    <p class="blurb">
+                    <p class="blurb collection-summary">
                         Studies how syndrome measurements respond to coherent unitary errors and identifies a
                         transition where logical information stops being efficiently recoverable.
                     </p>
@@ -195,10 +197,10 @@
                 </article>
 
                 <!-- Paper: Random Plaquette Models -->
-                <article class="card research-card">
+                <article class="card research-card collection-card">
                     <header class="research-head">
-                        <h2>Plaquette Models &amp; Measurement-Induced Criticality</h2>
-                        <p class="meta">Plaquette Models • Cellular Automata • Criticality</p>
+                        <p class="meta collection-meta">Plaquette Models • Cellular Automata • Criticality</p>
+                        <h2><a href="https://arxiv.org/abs/2405.08286" target="_blank" rel="noopener">Plaquette Models &amp; Measurement-Induced Criticality</a></h2>
                     </header>
 
                     <figure class="thumbs thumbs--uniform">
@@ -212,7 +214,7 @@
                         </figcaption>
                     </figure>
 
-                    <p class="blurb">
+                    <p class="blurb collection-summary">
                         Relates randomized plaquette models to 1+1D cellular-automaton dynamics and connects their
                         criticality to measurement-induced transitions in hybrid quantum circuits.
                     </p>
@@ -226,10 +228,10 @@
                 </article>
 
                 <!-- Paper: Entanglement/Complexity via Ising Models -->
-                <article class="card research-card">
+                <article class="card research-card collection-card">
                     <header class="research-head">
-                        <h2>Entanglement Phase Transitions &amp; Complexity via Ising Models</h2>
-                        <p class="meta">Cluster States • Transfer Matrices • Sampling Complexity</p>
+                        <p class="meta collection-meta">Cluster States • Transfer Matrices • Sampling Complexity</p>
+                        <h2><a href="https://arxiv.org/abs/2310.01699" target="_blank" rel="noopener">Entanglement Phase Transitions &amp; Complexity via Ising Models</a></h2>
                     </header>
 
                     <figure class="thumbs thumbs--uniform">
@@ -243,7 +245,7 @@
                             entanglement.</figcaption>
                     </figure>
 
-                    <p class="blurb">
+                    <p class="blurb collection-summary">
                         Links boundary-state entanglement transitions in measured cluster states to Ising partition
                         functions with complex parameters and the difficulty of classical sampling.
                     </p>
@@ -258,7 +260,7 @@
             </div>
         </section>
 
-        <section id="publications" class="section container">
+        <section id="publications" class="section container collection-publications">
             <h2>Publications</h2>
 
             <ol class="pub-list">
